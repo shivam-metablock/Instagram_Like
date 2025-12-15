@@ -22,7 +22,7 @@ export const Admin: React.FC = () => {
     const getuserLength=async()=>{
         try {
             const userLength=await userAPI.getLength()
-            setUserLength(userLength)
+            setUserLength(userLength.data)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
