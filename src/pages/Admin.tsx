@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { orderAPI, proxyAPI } from '../services/api';
+import { orderAPI, proxyAPI, userAPI } from '../services/api';
 import { Users, ShoppingBag, DollarSign, Globe, Check, X, ImageIcon } from 'lucide-react';
 import { RejectionModal } from '../components/admin/RejectionModal';
 
@@ -12,11 +12,21 @@ export const Admin: React.FC = () => {
     const [rejectingOrder, setRejectingOrder] = useState<string | null>(null);
     const [viewingProof, setViewingProof] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [userLength, setUserLength] = useState(0);
 
     useEffect(() => {
         fetchData();
+        getuserLength()
     }, []);
 
+    const getuserLength=async()=>{
+        try {
+            const userLength=await userAPI.getLength()
+            setUserLength(userLength)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
     const fetchData = async () => {
         try {
             const [ordersData, proxiesData] = await Promise.all([
@@ -78,7 +88,7 @@ export const Admin: React.FC = () => {
                     <Card className="bg-blue-500/10 border-blue-500/20">
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400">
-                                <Users size={24} />
+                                <Users size={userLength} />
                             </div>
                             <div>
                                 <div className="text-2xl font-bold text-white">1,234</div>

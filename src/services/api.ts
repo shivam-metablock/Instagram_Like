@@ -28,6 +28,10 @@ export const userAPI = {
         const response = await api.post('/users/Instagram', data);
         return response.data;
     },
+    getLength: async () => {
+        const response = await api.get('/users/length');
+        return response.data;
+    },
 }
 
 export const authAPI = {

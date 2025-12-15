@@ -16,4 +16,9 @@ router.route('/Instagram')
     res.json({data:user})
 })
 
+router.route('/length')
+    .get(protect, async(req,res)=>{
+    const user= await User.countDocuments()
+    res.json({data:user})
+})
 export default router
