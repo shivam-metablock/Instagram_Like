@@ -88,10 +88,10 @@ export const Admin: React.FC = () => {
                     <Card className="bg-blue-500/10 border-blue-500/20">
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400">
-                                <Users size={userLength} />
+                                <Users size={24} />
                             </div>
                             <div>
-                                <div className="text-2xl font-bold text-white">1,234</div>
+                                <div className="text-2xl font-bold text-white">{userLength}</div>
                                 <div className="text-sm text-gray-400">Total Users</div>
                             </div>
                         </div>
