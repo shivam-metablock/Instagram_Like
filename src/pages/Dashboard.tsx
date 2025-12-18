@@ -142,19 +142,19 @@ export const Dashboard: React.FC = () => {
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}
                             />
-                        </div> : <div className="flex items-center gap-2">
-                            <p className="text-white">Please add your account link first</p>
-                            <form onSubmit={handleSubmit} className="flex gap-2">
-                                <input type="text" name="accountLink" placeholder='Account Link' className="bg-slate-800 text-white px-3 py-2 rounded-lg border border-slate-700" required />
-                                <input type="text" name="accountName" placeholder='Account Name' className="bg-slate-800 text-white px-3 py-2 rounded-lg border border-slate-700" required />
-                                <Button type="submit">Add Account Link</Button>
+                        </div> : <div className="flex flex-col gap-3">
+                            <p className="text-white text-sm md:text-base">Please add your account link first</p>
+                            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3 md:items-center">
+                                <input type="text" name="accountLink" placeholder='Account Link' className="w-full md:flex-1 bg-slate-800 text-white px-3 py-2 rounded-lg border border-slate-700 focus:outline-none focus:border-purple-500/50" required />
+                                <input type="text" name="accountName" placeholder='Account Name' className="w-full md:flex-1 bg-slate-800 text-white px-3 py-2 rounded-lg border border-slate-700 focus:outline-none focus:border-purple-500/50" required />
+                                <Button type="submit" className="w-full md:w-auto whitespace-nowrap">Add Account Link</Button>
                             </form>
                         </div>}
                         {
                             users?.data?.AccountLink && (
                                 <div className="flex items-center gap-2 text-white">
-                                   Selected Account <a href={users?.data?.AccountLink} target="_blank" className="text-white"> {users?.data?.AccountName}</a>
-  
+                                    Selected Account <a href={users?.data?.AccountLink} target="_blank" className="text-white"> {users?.data?.AccountName}</a>
+
                                 </div>
                             )
                         }
