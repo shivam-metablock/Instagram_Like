@@ -13,6 +13,8 @@ import { ManageUsers } from './pages/ManageUsers'; // Added import for ManageUse
 // import { MyPlans } from './pages/MyPlans';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { UsersVideo } from './pages/SeeUserView';
+import { Orders } from './pages/Orders';
 
 function App() {
   return (
@@ -35,8 +37,9 @@ function App() {
           {/* Admin Only Route */}
           <Route path="/admin" element={<ProtectedRoute requireAdmin={true}><Admin /></ProtectedRoute>} />
           <Route path="/admin/create-plans" element={<ProtectedRoute requireAdmin={true}><CreatePlans /></ProtectedRoute>} />
-          <Route path="/admin/users" element={<ProtectedRoute requireAdmin={true}><ManageUsers /></ProtectedRoute>} /> {/* Added new route */}
-
+          <Route path="/admin/users" element={<ProtectedRoute requireAdmin={true}><ManageUsers /></ProtectedRoute>} />
+          <Route path="/admin/videos" element={<ProtectedRoute requireAdmin={true}><UsersVideo /></ProtectedRoute>} />
+          <Route path="/admin/orders" element={<ProtectedRoute requireAdmin={true}><Orders /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>

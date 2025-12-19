@@ -90,6 +90,7 @@ export const Register: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [number, setNumber] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { register } = useAuth();
@@ -101,7 +102,7 @@ export const Register: React.FC = () => {
         setLoading(true);
 
         try {
-            await register(name, email, password);
+            await register(name, email, password, number);
             navigate('/dashboard');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed');
@@ -138,6 +139,17 @@ export const Register: React.FC = () => {
                             placeholder="John Doe"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                        <input
+                            type="tel"
+                            required
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                            placeholder="+918568928365"
+                            value={number}
+                            onChange={(e) => setNumber(e.target.value)}
                         />
                     </div>
                     <div>

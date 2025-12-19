@@ -13,6 +13,7 @@ interface Plan {
     price: number;
     features: string[];
     type: string;
+    platform?: string;
     viewsCount?: number;
     likesCount?: number;
     followersCount?: number;
@@ -28,7 +29,8 @@ export const CreatePlans: React.FC = () => {
         description: '',
         price: 0,
         features: [''],
-        type: 'SEO',
+        type: 'VIEWS',
+        platform: 'INSTAGRAM',
         viewsCount: 0,
         likesCount: 0,
         followersCount: 0,
@@ -54,6 +56,8 @@ export const CreatePlans: React.FC = () => {
                 ? formData
                 : { ...formData, viewsCount: undefined };
 
+            console.log("form Data", formData);
+
             if (editingPlan) {
                 await planAPI.update(editingPlan._id, planData);
             } else {
@@ -73,6 +77,7 @@ export const CreatePlans: React.FC = () => {
             price: plan.price,
             features: plan.features,
             type: plan.type,
+            platform: plan.platform || 'INSTAGRAM',
             viewsCount: plan.viewsCount || 0,
             likesCount: plan.likesCount || 0,
             followersCount: plan.followersCount || 0,
@@ -93,7 +98,7 @@ export const CreatePlans: React.FC = () => {
     };
 
     const resetPlanForm = () => {
-        setFormData({ name: '', description: '', price: 0, features: [''], type: 'SEO', viewsCount: 0, likesCount: 0, followersCount: 0 });
+        setFormData({ name: '', description: '', price: 0, features: [''], type: 'VIEWS', platform: 'INSTAGRAM', viewsCount: 0, likesCount: 0, followersCount: 0 });
         setEditingPlan(null);
         setShowAddPlan(false);
     };
@@ -136,7 +141,7 @@ export const CreatePlans: React.FC = () => {
                                         className="w-full bg-white/5 border border-white/10 rounded-lg  px-4 py-2 text-white"
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        placeholder="e.g., Premium SEO Package"
+                                        placeholder="e.g., Premium  Package"
                                     />
                                 </div>
                                 <div>
@@ -165,6 +170,19 @@ export const CreatePlans: React.FC = () => {
                                         <option value="LIKES">Likes Boost</option>
                                         <option value="FOLLOWERS">Followers Boost</option>
                                         <option value="BUNDLE">Bundle(like+followers+views)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-400 mb-2">Platform</label>
+                                    <select
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-black"
+                                        value={formData.platform}
+                                        onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
+                                    >
+                                        <option value="INSTAGRAM">Instagram</option>
+                                        <option value="FACEBOOK">Facebook</option>
+                                        <option value="YOUTUBE">YouTube</option>
+                                        <option value="TELEGRAM">Telegram</option>
                                     </select>
                                 </div>
                                 {formData.type === 'VIEWS' || formData.type === 'BUNDLE' ? (
@@ -268,6 +286,9 @@ export const CreatePlans: React.FC = () => {
                                                 <h4 className="text-white font-medium text-lg">{plan.name}</h4>
                                                 <Badge variant={plan.type === 'VIEWS' ? 'success' : 'default'}>
                                                     {plan.type}
+                                                </Badge>
+                                                <Badge variant={plan.platform === 'INSTAGRAM' ? 'default' : plan.platform === 'FACEBOOK' ? 'default' : plan.platform === 'YOUTUBE' ? 'danger' : 'default'}>
+                                                    {plan.platform || 'INSTAGRAM'}
                                                 </Badge>
                                                 <div className="text-white font-bold">₹{plan.price}</div>
                                                 {plan.viewsCount ? <span className="text-sm text-blue-400">({plan.viewsCount.toLocaleString()} Reach)</span> : null}

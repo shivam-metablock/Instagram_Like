@@ -1,11 +1,16 @@
 import Plan from '../models/Plan.js';
 
 // @desc    Get all plans
-// @route   GET /api/plans
+// @route   GET /api/plans?platform=INSTAGRAM
 // @access  Public
 export const getPlans = async (req, res) => {
     try {
-        const plans = await Plan.find({});
+        const { platform } = req.query;
+        
+        // Build filter object
+    
+        
+        const plans =platform? await Plan.find({platform: platform}):await Plan.find({});
         res.json(plans);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -17,7 +22,7 @@ export const getPlans = async (req, res) => {
 // @access  Private/Admin
 export const createPlan = async (req, res) => {
     try {
-        const { name, description, price, features, type } = req.body;
+        const { name, description, price, features, type,platform } = req.body;
 
         const plan = await Plan.create({
             name,
@@ -25,6 +30,7 @@ export const createPlan = async (req, res) => {
             price,
             features,
             type,
+            platform
         });
 
         res.status(201).json(plan);

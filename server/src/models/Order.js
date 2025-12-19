@@ -29,6 +29,13 @@ const orderSchema = new mongoose.Schema({
     rejectionReason: {
         type: String,
     },
+    video: {
+        type: String,
+    },
+    isCompleted: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,
 });

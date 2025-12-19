@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, Settings, Menu, User, LogOut, LogIn, Plus, Users, List } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useAuth } from '../../context/AuthContext';
 
@@ -28,6 +28,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         ...(user?.role === 'ADMIN' ? [{ icon: List, label: 'Proxy List', path: '/proxies' }] : []),
         ...(user?.role === 'ADMIN' ? [{ icon: Plus, label: 'Create Plans', path: '/admin/create-plans' }] : []),
         ...(user?.role === 'ADMIN' ? [{ icon: Users, label: 'Manage Users', path: '/admin/users' }] : []),
+        ...(user?.role === 'ADMIN' ? [{ icon: LucideCopySlash, label: 'Products', path: '/admin/videos' }] : []),
+        ...(user?.role === 'ADMIN' ? [{ icon: ListOrderedIcon, label: 'Orders', path: '/admin/orders' }] : []),
 
         // Everyone gets Settings
         { icon: Settings, label: 'Settings', path: '/settings' },
@@ -50,7 +52,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             {/* Sidebar */}
             <aside className={cn(
-                "fixed inset-y-0 left-0 z-50 w-64 bg-slate-900/95 backdrop-blur-xl border-r border-white/10 transition-transform duration-300 transform lg:translate-x-0 lg:static",
+                "fixed inset-y-0 left-0 z-50 w-64 bg-slate-900/95 backdrop-blur-xl border-r border-white/10 transition-transform duration-300 transform lg:translate-x-0 lg:static flex flex-col",
                 !sidebarOpen ? "-translate-x-full lg:w-20" : "translate-x-0"
             )}>
                 <div className="h-16 flex items-center justify-center border-b border-white/10">
@@ -60,7 +62,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <span className={cn("text-xl font-bold text-blue-500 absolute transition-opacity duration-300", sidebarOpen ? "opacity-0" : "opacity-100 hidden lg:block")}>IG</span>
                 </div>
 
-                <nav className="p-4 space-y-2">
+                <nav className="p-4 space-y-2 flex-1 overflow-y-auto custom-scrollbar">
                     {navItems.map((item) => (
                         <Link
                             key={item.path}
@@ -83,6 +85,80 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                             )}
                         </Link>
                     ))}
+  {
+                        user?.role !== 'ADMIN' && (
+                          <div className='mx-5'>
+                              <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors flex gap-4">
+                              <HelpingHandIcon size={20} className="min-w-[20px]" /> Get Help
+                            </a>
+                          </div>
+                        )
+                    }
+                    {/* Platform Buy Plans - Only for regular users */}
+                    {user?.role !== 'ADMIN' && (
+                        <>
+                            <div className={cn("border-t border-white/10 my-2", !sidebarOpen && "lg:hidden")} />
+                            <div className={cn("text-xs text-gray-500 uppercase px-4 py-2", !sidebarOpen && "lg:hidden")}>Buy Plans</div>
+
+                            {/* Instagram */}
+                            <Link
+                                to="/plans?platform=INSTAGRAM"
+                                onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group bg-gradient-to-r from-pink-600/20 to-purple-600/20 hover:from-pink-600/30 hover:to-purple-600/30 text-pink-400 border border-pink-500/20"
+                            >
+                                <Instagram size={20} className="min-w-[20px]" />
+                                <span className={cn("whitespace-nowrap transition-all duration-300", !sidebarOpen && "lg:opacity-0 lg:w-0 lg:hidden")}>Instagram</span>
+                                {!sidebarOpen && (
+                                    <div className="absolute left-16 bg-slate-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity lg:block hidden z-50 whitespace-nowrap border border-white/10">
+                                        Buy Instagram Plans
+                                    </div>
+                                )}
+                            </Link>
+
+                            {/* Facebook */}
+                            <Link
+                                to="/plans?platform=FACEBOOK"
+                                onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group bg-gradient-to-r from-blue-600/20 to-blue-700/20 hover:from-blue-600/30 hover:to-blue-700/30 text-blue-400 border border-blue-500/20"
+                            >
+                                <Facebook size={20} className="min-w-[20px]" />
+                                <span className={cn("whitespace-nowrap transition-all duration-300", !sidebarOpen && "lg:opacity-0 lg:w-0 lg:hidden")}>Facebook</span>
+                                {!sidebarOpen && (
+                                    <div className="absolute left-16 bg-slate-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity lg:block hidden z-50 whitespace-nowrap border border-white/10">
+                                        Buy Facebook Plans
+                                    </div>
+                                )}
+                            </Link>
+
+                            {/* Telegram */}
+                            <Link
+                                to="/plans?platform=TELEGRAM"
+                                onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group bg-gradient-to-r from-sky-600/20 to-cyan-600/20 hover:from-sky-600/30 hover:to-cyan-600/30 text-sky-400 border border-sky-500/20"
+                            >
+                                <Send size={20} className="min-w-[20px]" />
+                                <span className={cn("whitespace-nowrap transition-all duration-300" )}>Telegram</span>
+                               
+                            </Link>
+
+                            {/* YouTube */}
+                            <Link
+                                to="/plans?platform=YOUTUBE"
+                                onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                                className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group bg-gradient-to-r from-red-600/20 to-red-700/20 hover:from-red-600/30 hover:to-red-700/30 text-red-400 border border-red-500/20"
+                            >
+                                <Youtube size={20} className="min-w-[20px]" />
+                                <span className={cn("whitespace-nowrap transition-all duration-300", !sidebarOpen && "lg:opacity-0 lg:w-0 lg:hidden")}>YouTube</span>
+                                {!sidebarOpen && (
+                                    <div className="absolute left-16 bg-slate-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity lg:block hidden z-50 whitespace-nowrap border border-white/10">
+                                        Buy YouTube Plans
+                                    </div>
+                                )}
+                            </Link>
+                        </>
+                    )}
+
+                    <div className="border-t border-white/10 my-2" />
 
                     {/* Logout/Login Button */}
                     {user ? (
@@ -102,6 +178,22 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <span className={cn("whitespace-nowrap transition-all duration-300", !sidebarOpen && "lg:opacity-0 lg:w-0 lg:hidden")}>Login</span>
                         </Link>
                     )}
+
+                    <div className={cn("mt-auto p-4 border-t border-white/10 flex items-center gap-4", !sidebarOpen && "flex-col")}>
+                  
+                        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors">
+                            <Instagram size={25} className="min-w-[20px]" />
+                        </a>
+                        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
+                            <Facebook size={25} className="min-w-[20px]" />
+                        </a>
+                        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-500 transition-colors">
+                            <Youtube size={25} className="min-w-[20px]" />
+                        </a>
+                        <a href="https://t.me/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-500 transition-colors">
+                        <Send size={25} className="min-w-[20px]" />
+                        </a>
+                    </div>
                 </nav>
             </aside>
 

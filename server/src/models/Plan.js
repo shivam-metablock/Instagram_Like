@@ -18,8 +18,14 @@ const planSchema = new mongoose.Schema({
     }],
     type: {
         type: String,
-        enum: ['SEO', 'THUMBNAIL', 'INFLUENCER', 'ADS', 'BUNDLE', 'VIEWS'],
-        default: 'SEO',
+        enum: ['LIKES', 'VIEWS', 'FOLLOWERS','BUNDLE'],
+        default: 'LIKES',
+    },
+    platform: {
+        type: String,
+        enum: ['INSTAGRAM', 'FACEBOOK', 'YOUTUBE', 'TELEGRAM'],
+        default: 'INSTAGRAM',
+        required: true,
     },
     viewsCount: {
         type: Number,

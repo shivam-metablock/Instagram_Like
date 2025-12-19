@@ -17,6 +17,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
     const [screenshot, setScreenshot] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [video, setVideo] = useState('');
 
     useEffect(() => {
         loadConfig();
@@ -54,6 +55,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
             formData.append('amount', plan.price.toString());
             formData.append('utr', utr);
             formData.append('screenshot', screenshot);
+            formData.append('video', video);
 
             await orderAPI.create(formData);
             setStep(3); // Success step
@@ -135,6 +137,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
                                     placeholder="e.g. 1234567890"
                                     value={utr}
                                     onChange={(e) => setUtr(e.target.value)}
+                                    required
+                                />
+                            </div>
+                               <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-2">Video/Profile Url</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500/50"
+                                    placeholder=""
+                                    value={video}
+                                    onChange={(e) => setVideo(e.target.value)}
                                     required
                                 />
                             </div>

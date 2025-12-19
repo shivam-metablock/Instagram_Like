@@ -5,7 +5,7 @@ import {
     getOrders,
     getOrder,
     createOrder,
-    updateOrderStatus,getMyOrders
+    updateOrderStatus,getMyOrders,updateOrder
 } from '../controllers/orderController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -32,7 +32,7 @@ router.route('/my2')
     .get(protect, getMyOrders);
 
 router.route('/:id')
-    .get(protect, getOrder);
+    .get(protect, getOrder).put(protect, updateOrder);
 
 router.route('/:id/status')
     .put(protect, updateOrderStatus);

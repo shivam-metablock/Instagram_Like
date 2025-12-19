@@ -94,8 +94,9 @@ export const postAPI = {
 
 // Plan API
 export const planAPI = {
-    getAll: async () => {
-        const response = await api.get('/plans');
+    getAll: async (platform?: string) => {
+        const params = platform ? { platform } : {};
+        const response = await api.get('/plans', { params });
         return response.data;
     },
 
@@ -138,6 +139,10 @@ export const orderAPI = {
                 'Content-Type': 'multipart/form-data',
             },
         });
+        return response.data;
+    },
+    updateOrder: async (id: string, data: any) => {
+        const response = await api.put(`/orders/${id}`, data);
         return response.data;
     },
 

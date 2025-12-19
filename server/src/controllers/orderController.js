@@ -49,7 +49,7 @@ export const getOrder = async (req, res) => {
 // @access  Private
 export const createOrder = async (req, res) => {
     try {
-        const { planId, amount, utr } = req.body;
+        const { planId, amount, utr,video } = req.body;
         
         let screenshotPath = '';
         if (req.file) {
@@ -62,7 +62,8 @@ export const createOrder = async (req, res) => {
             amount,
             utr,
             screenshotPath,
-            status: 'PENDING'
+            status: 'PENDING',
+            video
         });
 
         res.status(201).json(order);
@@ -103,6 +104,19 @@ export const getMyOrders=async(req,res)=>{
     try {
         const orders=await Order.find({userId:req.user._id}).populate('planId')
         res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+export const updateOrder=async(req,res)=>{
+    try {
+        const order=await Order.findById(req.params.id)
+        if(!order){
+            return res.status(404).json({message:'Order not found'})
+        }
+        order.isCompleted = req.body.isCompleted !== undefined ? req.body.isCompleted : true;
+        await order.save()
+        res.json(order)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

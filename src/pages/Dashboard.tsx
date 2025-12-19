@@ -5,35 +5,35 @@ import { Button } from '../components/ui/Button';
 // import { LiveCounter } from '../components/simulation/LiveCounter';
 // import { GrowthChart } from '../components/simulation/GrowthChart';
 // import { ProxyTable } from '../components/simulation/ProxyTable';
-import { useSimulation } from '../hooks/useSimulation';
-import { postAPI, orderAPI, userAPI } from '../services/api';
+// import { useSimulation } from '../hooks/useSimulation';
+import {  orderAPI, userAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { Play, AlertCircle, ShoppingCart } from 'lucide-react';
+import {  AlertCircle, ShoppingCart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MyPlans } from './MyPlans';
 
 export const Dashboard: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [url, setUrl] = useState('');
+    // const [url, setUrl] = useState('');
     const [activePlan, setActivePlan] = useState<any>(null);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
+    // const [loading, setLoading] = useState(false);
+    // const [message, setMessage] = useState('');
     const [users, setUsers] = useState<any>([]);
 
     const isAdmin = user?.role === 'ADMIN';
 
     // Calculate limits from active plan
-    const limits = React.useMemo(() => {
-        if (!activePlan) return {};
-        return {
-            views: activePlan.viewsCount || 0,
-            likes: activePlan.likesCount || 0,
-            followers: activePlan.followersCount || 0
-        };
-    }, [activePlan]);
+    // const limits = React.useMemo(() => {
+    //     if (!activePlan) return {};
+    //     return {
+    //         views: activePlan.viewsCount || 0,
+    //         likes: activePlan.likesCount || 0,
+    //         followers: activePlan.followersCount || 0
+    //     };
+    // }, [activePlan]);
 
-    const { startSimulation } = useSimulation(0, limits);
+    // const { startSimulation } = useSimulation(0, limits);
 
     useEffect(() => {
         checkActivePlan();
@@ -61,30 +61,30 @@ export const Dashboard: React.FC = () => {
         }
     };
 
-    const handleStartBoost = async () => {
-        if (!url) {
-            setMessage('Please enter an Instagram Post URL');
-            return;
-        }
+    // const handleStartBoost = async () => {
+    //     if (!url) {
+    //         setMessage('Please enter an Instagram Post URL');
+    //         return;
+    //     }
 
-        if (!activePlan) {
-            setMessage('You need to purchase a Reach Boost plan first!');
-            setTimeout(() => navigate('/plans'), 2000);
-            return;
-        }
+    //     if (!activePlan) {
+    //         setMessage('You need to purchase a Reach Boost plan first!');
+    //         setTimeout(() => navigate('/plans'), 2000);
+    //         return;
+    //     }
 
-        setLoading(true);
-        try {
-            // Save post to database
-            await postAPI.create({ url, title: 'Instagram Post' });
-            startSimulation();
-            setMessage('Boost started! (Simulation only)');
-        } catch (error: any) {
-            setMessage(error.response?.data?.message || 'Failed to start boost');
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     setLoading(true);
+    //     try {
+    //         // Save post to database
+    //         await postAPI.create({ url, title: 'Instagram Post' });
+    //         startSimulation();
+    //         setMessage('Boost started! (Simulation only)');
+    //     } catch (error: any) {
+    //         setMessage(error.response?.data?.message || 'Failed to start boost');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     // Render admin view
     if (isAdmin) {
@@ -134,15 +134,7 @@ export const Dashboard: React.FC = () => {
                 {/* URL Input & Status */}
                 <Card className="p-6">
                     <div className="space-y-4">
-                        {users?.data?.AccountLink ? <div className="flex items-center gap-2">
-                            <input
-                                type="text"
-                                placeholder="Paste Instagram Post Link..."
-                                className="flex-1 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500/50"
-                                value={url}
-                                onChange={(e) => setUrl(e.target.value)}
-                            />
-                        </div> : <div className="flex flex-col gap-3">
+                        {!users?.data?.AccountLink && <div className="flex flex-col gap-3">
                             <p className="text-white text-sm md:text-base">Please add your account link first</p>
                             <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3 md:items-center">
                                 <input type="text" name="accountLink" placeholder='Account Link' className="w-full md:flex-1 bg-slate-800 text-white px-3 py-2 rounded-lg border border-slate-700 focus:outline-none focus:border-purple-500/50" required />
@@ -150,6 +142,17 @@ export const Dashboard: React.FC = () => {
                                 <Button type="submit" className="w-full md:w-auto whitespace-nowrap">Add Account Link</Button>
                             </form>
                         </div>}
+                         {/*<div className="flex items-center gap-2">
+                             <input
+                                type="text"
+                                placeholder="Paste Instagram Post Link..."
+                                className="flex-1 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500/50"
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
+                            />
+                        </div> : */}
+                        
+                        
                         {
                             users?.data?.AccountLink && (
                                 <div className="flex items-center gap-2 text-white">
@@ -175,24 +178,24 @@ export const Dashboard: React.FC = () => {
                             </div>
                         )}
 
-                        {message && (
+                        {/* {message && (
                             <div className={`p - 3 rounded - lg text - sm ${message.includes('success') || message.includes('started')
                                 ? 'bg-green-500/10 border border-green-500/20 text-green-400'
                                 : 'bg-red-500/10 border border-red-500/20 text-red-400'
                                 } `}>
                                 {message}
                             </div>
-                        )}
+                        )} */}
 
                         <div className="flex gap-4">
 
-                            {users?.data?.AccountLink && <Button
+                            {/* {users?.data?.AccountLink && <Button
                                 onClick={handleStartBoost}
                                 className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
                                 disabled={loading}
                             >
                                 <Play size={20} /> {loading ? 'Starting...' : 'Start Reach Boost'}
-                            </Button>}
+                            </Button>} */}
 
 
                         </div>

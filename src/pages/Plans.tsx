@@ -6,14 +6,18 @@ import { planAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Check, Zap, Star } from 'lucide-react';
 import { PaymentModal } from '../components/plans/PaymentModal';
+import { useSearchParams } from 'react-router-dom';
+import { getTypeColor } from '../utils/color';
 
 interface Plan {
     _id: string;
     name: string;
     description: string;
     price: number;
+    
     features: string[];
     type: string;
+    platform: string;
 }
 
 export const Plans: React.FC = () => {
@@ -22,6 +26,8 @@ export const Plans: React.FC = () => {
     const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
     const [message, setMessage] = useState('');
     const { user } = useAuth();
+    const [searchParams] = useSearchParams();
+    const platformFilter = searchParams.get('platform');
 
     // Separate VIEWS plans from other service plans
     const reachPlans = plans.filter(p => p.type === 'VIEWS');
@@ -29,11 +35,12 @@ export const Plans: React.FC = () => {
 
     useEffect(() => {
         fetchPlans();
-    }, []);
+    }, [platformFilter]); // Re-fetch when platform changes
 
     const fetchPlans = async () => {
         try {
-            const data = await planAPI.getAll();
+            setLoading(true);
+            const data = await planAPI.getAll(platformFilter || undefined);
             setPlans(data);
         } catch (error) {
             console.error('Error fetching plans:', error);
@@ -60,16 +67,7 @@ export const Plans: React.FC = () => {
         }, 3000);
     };
 
-    const getTypeColor = (type: string) => {
-        const colors: Record<string, string> = {
-            VIEWS: 'bg-gradient-to-r from-purple-500 to-pink-500',
-            SEO: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-            THUMBNAIL: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-            INFLUENCER: 'bg-green-500/20 text-green-400 border-green-500/30',
-            ADS: 'bg-red-500/20 text-red-400 border-red-500/30',
-        };
-        return colors[type] || 'bg-gray-500/20 text-gray-400 border-gray-500/30';
-    };
+  
 
     return (
         <Layout>
@@ -80,8 +78,19 @@ export const Plans: React.FC = () => {
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-pink-500/20 rounded-full text-pink-400 text-sm font-medium mb-4">
                             <Zap size={16} /> Most Popular
                         </div>
-                        <h2 className="text-4xl font-bold text-white mb-3">Instagram Reach Boost Plans</h2>
-                        <p className="text-gray-400 text-lg">Choose a package and start skyrocketing your reach</p>
+                        <h2 className="text-4xl font-bold text-white mb-3">
+                            {platformFilter ? `${platformFilter} ` : ''}Instagram Reach Boost Plans
+                        </h2>
+                        <p className="text-gray-400 text-lg">
+                            {platformFilter
+                                ? `Showing plans for ${platformFilter.toLowerCase()}`
+                                : 'Choose a package and start skyrocketing your reach'}
+                        </p>
+                        {platformFilter && (
+                            <div className="mt-4 inline-block p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400 text-sm">
+                                💡 Showing all plans (set platform in "Create Plans" to filter)
+                            </div>
+                        )}
                     </div>
 
                     {message && (
@@ -122,12 +131,16 @@ export const Plans: React.FC = () => {
                                         <p className="text-gray-400 text-sm mb-6 text-center flex-1">{plan.description}</p>
 
                                         <div className="space-y-3 mb-6">
+                                            <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.platform)}`}>
+                                            {plan.platform}
+                                        </span>
                                             {plan.features.map((feature, idx) => (
                                                 <div key={idx} className="flex items-center gap-2 text-sm text-gray-300">
                                                     <Check size={16} className="text-green-400 flex-shrink-0" />
                                                     <span>{feature}</span>
                                                 </div>
                                             ))}
+                                        
                                         </div>
 
                                         <Button
@@ -158,6 +171,9 @@ export const Plans: React.FC = () => {
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.type)}`}>
                                             {plan.type}
                                         </span>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.platform)}`}>
+                                            {plan.platform}
+                                        </span>
                                         <div className="text-right">
                                             <div className="text-3xl font-bold text-white">₹{plan.price}</div>
                                             <div className="text-xs text-gray-400">one-time</div>
@@ -178,8 +194,9 @@ export const Plans: React.FC = () => {
 
                                     <Button
                                         onClick={() => handlePurchaseClick(plan)}
-                                        variant="outline"
-                                        className="w-full"
+                                       
+                                        className={`w-full from-purple-500 hover:to-pink-500`}
+                                      
                                     >
                                         Purchase Now
                                     </Button>
@@ -189,13 +206,7 @@ export const Plans: React.FC = () => {
                     </div>
                 )}
 
-                {/* Disclaimer */}
-                <div className="mt-12 p-6 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                    <p className="text-yellow-400 text-sm">
-                        <strong>⚠️ Important:</strong> Reach boost plans are for SIMULATION purposes only. We do NOT provide real Instagram views or violate Terms of Service. This is purely a demonstration platform.
-                    </p>
-                </div>
-
+           
                 {/* Payment Modal */}
                 {selectedPlan && (
                     <PaymentModal

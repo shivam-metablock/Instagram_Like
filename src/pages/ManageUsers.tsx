@@ -27,6 +27,7 @@ interface Order {
     amount: number;
     status: string;
     createdAt: string;
+    isCompleted: boolean;
 }
 
 interface UserWithOrders {
@@ -103,7 +104,10 @@ export const ManageUsers: React.FC = () => {
         setShowPlansModal(false);
         setSelectedUser(null);
     };
-
+    const handleCompleteOrder = async (orderId: string) => {
+        await orderAPI.updateOrder(orderId, { isCompleted: true })
+        fetchAllUsersAndOrders()
+    }
     return (
         <Layout>
             <div className="max-w-7xl mx-auto space-y-8">
@@ -230,6 +234,7 @@ export const ManageUsers: React.FC = () => {
                                                         <th className="px-4 py-2">Amount</th>
                                                         <th className="px-4 py-2">Status</th>
                                                         <th className="px-4 py-2">Date</th>
+                                                        <th>Completed</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-white/5">
@@ -256,6 +261,11 @@ export const ManageUsers: React.FC = () => {
                                                             </td>
                                                             <td className="px-4 py-2 text-gray-400">
                                                                 {new Date(order.createdAt).toLocaleDateString()}
+                                                            </td>
+                                                            <td className="px-4 py-2" onClick={() => handleCompleteOrder(order._id)}>
+                                                                <Badge variant={order.isCompleted ? 'success' : 'warning'}>
+                                                                    {order.isCompleted ? 'Completed' : 'Pending'}
+                                                                </Badge>
                                                             </td>
                                                         </tr>
                                                     ))}

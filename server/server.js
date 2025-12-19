@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './src/config/db.js';
 import authRoutes from './src/routes/authRoutes.js';
 import postRoutes from './src/routes/postRoutes.js';
@@ -8,9 +10,11 @@ import planRoutes from './src/routes/planRoutes.js';
 import orderRoutes from './src/routes/orderRoutes.js';
 import proxyRoutes from './src/routes/proxyRoutes.js';
 import configRoutes from './src/routes/configRoutes.js';
-import { protect } from './src/middleware/auth.js';
-import User from './src/models/User.js';
 import userRoutes from './src/routes/userRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 dotenv.config();
 
 const app = express();
@@ -19,7 +23,10 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Replace with your frontend URL
+    credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -34,7 +41,7 @@ app.use('/api/config', configRoutes);
 app.use('/api/users',userRoutes);
 
 // Serve static files
-app.use('/api/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health check
 app.get('/', (req, res) => {
