@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { orderAPI, proxyAPI, userAPI } from '../services/api';
-import { Users, ShoppingBag, DollarSign, Globe} from 'lucide-react';
+import { Users, ShoppingBag, Globe, IndianRupee} from 'lucide-react';
 
 export const Admin: React.FC = () => {
     const [orders, setOrders] = useState<any[]>([]);
@@ -82,7 +82,7 @@ export const Admin: React.FC = () => {
                     <Card className="bg-purple-500/10 border-purple-500/20">
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400">
-                                <DollarSign size={24} />
+                                <IndianRupee size={24} />
                             </div>
                             <div>
                                 <div className="text-2xl font-bold text-white">
