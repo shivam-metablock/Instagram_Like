@@ -20,17 +20,16 @@ dotenv.config();
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your frontend URL
+    origin: '*', 
     credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
@@ -60,6 +59,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+connectDB().then(()=>{app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-});
+})})
