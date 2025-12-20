@@ -51,12 +51,13 @@ export const Landing: React.FC = () => {
             {/* Navbar */}
             <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 transition-all">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30">
                             <Zap size={20} fill="currentColor" />
                         </div>
                         <span className="text-xl font-bold text-slate-900 tracking-tight">IG Simulator</span>
-                    </div>
+                    </div> */}
+                    <img src="/logo.png" width={150} alt="LOGO" />
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
                         <a href="#features" className="hover:text-blue-600 transition-colors">Features</a>
