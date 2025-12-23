@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon } from 'lucide-react';
+import { Home, LayoutDashboard, ShoppingBag, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useAuth } from '../../context/AuthContext';
 
@@ -17,6 +17,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
     // Conditional navigation items
     const navItems = [
+        { icon: Home, label: 'Home', path: '/' },
         // Regular USER gets: Dashboard, My Posts, My Plans, Buy Plans, Settings
         ...(user?.role !== 'ADMIN' ? [{ icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: Video, label: 'My Posts', path: '/posts' }] : []),
@@ -56,8 +57,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 !sidebarOpen ? "-translate-x-full lg:w-20" : "translate-x-0"
             )}>
                 <div className="h-16 flex items-center justify-center border-b border-white/10">
-                       <img src="/logo.png" onClick={()=> navigate('/')} width={150} alt="LOGO" />
-                
+                    <img src="/logo.png" onClick={() => navigate('/')} width={150} alt="LOGO" />
+
                     <span className={cn("text-xl font-bold text-blue-500 absolute transition-opacity duration-300", sidebarOpen ? "opacity-0" : "opacity-100 hidden lg:block")}>IG</span>
                 </div>
 
@@ -84,13 +85,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                             )}
                         </Link>
                     ))}
-  {
+                    {
                         user?.role !== 'ADMIN' && (
-                          <div className='mx-5'>
-                              <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors flex gap-4">
-                              <HelpingHandIcon size={20} className="min-w-[20px]" /> Get Help
-                            </a>
-                          </div>
+                            <div className='mx-5'>
+                                <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors flex gap-4">
+                                    <HelpingHandIcon size={20} className="min-w-[20px]" /> Get Help
+                                </a>
+                            </div>
                         )
                     }
                     {/* Platform Buy Plans - Only for regular users */}
@@ -136,8 +137,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all group bg-gradient-to-r from-sky-600/20 to-cyan-600/20 hover:from-sky-600/30 hover:to-cyan-600/30 text-sky-400 border border-sky-500/20"
                             >
                                 <Send size={20} className="min-w-[20px]" />
-                                <span className={cn("whitespace-nowrap transition-all duration-300" )}>Telegram</span>
-                               
+                                <span className={cn("whitespace-nowrap transition-all duration-300")}>Telegram</span>
+
                             </Link>
 
                             {/* YouTube */}
@@ -179,7 +180,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     )}
 
                     <div className={cn("mt-auto p-4 border-t border-white/10 flex items-center gap-4", !sidebarOpen && "flex-col")}>
-                  
+
                         <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors">
                             <Instagram size={25} className="min-w-[20px]" />
                         </a>
@@ -190,7 +191,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <Youtube size={25} className="min-w-[20px]" />
                         </a>
                         <a href="https://t.me/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-500 transition-colors">
-                        <Send size={25} className="min-w-[20px]" />
+                            <Send size={25} className="min-w-[20px]" />
                         </a>
                     </div>
                 </nav>

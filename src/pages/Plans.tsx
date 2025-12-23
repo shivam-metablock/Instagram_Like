@@ -168,10 +168,10 @@ export const Plans: React.FC = () => {
                             {servicePlans.map((plan) => (
                                 <Card key={plan._id} className="flex flex-col h-full">
                                     <div className="flex items-center justify-between mb-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.type)}`}>
+                                        <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.type)}`}>
                                             {plan.type}
-                                        </span>
-                                         <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white`}>
+                                        </div>
+                                         <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold  bg-gradient-to-r from-purple-500 to-pink-500 text-white`}>
                                              {plan.platform}
                                             </div>
                                     
