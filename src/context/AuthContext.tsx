@@ -25,11 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         // Check for stored user on mount
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        setLoading(false);
+      
+        getSelf();
     }, []);
 
     const login = async (email: string, password: string) => {
@@ -67,6 +64,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
     };
 
+    const getSelf = async () => {
+        const data = await authAPI.getMe();
+        setUser(data);
+        setLoading(false);
+    };
     return (
         <AuthContext.Provider value={{ user, loading, login, register, logout }}>
             {children}
