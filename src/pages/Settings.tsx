@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { useAuth } from '../context/AuthContext';
@@ -7,34 +7,24 @@ import { PaymentConfigForm } from '../components/settings/PaymentConfigForm';
 
 export const Settings: React.FC = () => {
     const { user } = useAuth();
-    
-    // const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
     const [profileData, setProfileData] = useState({
         name: user?.name || '',
         number: user?.number || '',
     });
 
-    // const [passwordData, setPasswordData] = useState({
-    //     currentPassword: '',
-    //     newPassword: '',
-    //     confirmPassword: '',
-    // });
 
     const handleProfileUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         alert('Profile updated! (Demo only)');
     };
+    useEffect(()=>{
+       setProfileData({
+        name: user?.name || '',
+        number: user?.number || '',
+       }) 
+        },[user])
 
-    // const handlePasswordChange = (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     if (passwordData.newPassword !== passwordData.confirmPassword) {
-    //         alert('Passwords do not match!');
-    //         return;
-    //     }
-    //     alert('Password changed! (Demo only)');
-    //     setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    // };
 
     return (
         <Layout>
