@@ -2,14 +2,6 @@
 
 A full-stack simulation platform for YouTube view growth demonstration. Features a modern React frontend with glassmorphism UI and a Node.js/MongoDB backend.
 
-## ⚠️ Important Disclaimer
-
-**This is a SIMULATION ONLY platform.** It does not:
-- Generate real YouTube views
-- Violate YouTube Terms of Service
-- Interact with the YouTube API for view manipulation
-
-All metrics shown are simulated for demonstration and educational purposes.
 
 ## 🚀 Tech Stack
 
