@@ -56,7 +56,7 @@ export const Login: React.FC = () => {
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Number</label>
                         <input
                             type="number"
                             required
