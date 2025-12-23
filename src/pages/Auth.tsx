@@ -14,7 +14,12 @@ export const Login: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+    
+        if(email.length<10||email.length>10){
+            setError('Invalid Number');
+            return;
+        }
+          setError('');
         setLoading(true);
 
         try {
@@ -53,10 +58,10 @@ export const Login: React.FC = () => {
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
                         <input
-                            type="email"
+                            type="number"
                             required
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
-                            placeholder="admin@example.com"
+                            placeholder="+911234567890"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -88,7 +93,7 @@ export const Login: React.FC = () => {
 
 export const Register: React.FC = () => {
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const [Password2, setPassword2] = useState('');
     const [password, setPassword] = useState('');
     const [number, setNumber] = useState('');
     const [error, setError] = useState('');
@@ -98,11 +103,20 @@ export const Register: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if(password!=Password2){
+            setError('Passwords do not match');
+            return;
+        }
+        if(number.length<10||number.length>10){
+            setError('Invalid Number');
+            return;
+        }
         setError('');
         setLoading(true);
 
         try {
-            await register(name, email, password, number);
+
+            await register(name, password, number);
             navigate('/dashboard');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed');
@@ -142,9 +156,9 @@ export const Register: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Number</label>
                         <input
-                            type="tel"
+                            type="number"
                             required
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
                             placeholder="+918568928365"
@@ -152,17 +166,7 @@ export const Register: React.FC = () => {
                             onChange={(e) => setNumber(e.target.value)}
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Email</label>
-                        <input
-                            type="email"
-                            required
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
-                            placeholder="john@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
+                
                     <div>
                         <label className="block text-sm font-medium text-gray-400 mb-2">Password</label>
                         <input
@@ -174,6 +178,24 @@ export const Register: React.FC = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+                       <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Conform Password</label>
+                        <input
+                            type="password"
+                            required
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                            placeholder="••••••••"
+                            value={Password2}
+                            onChange={(e) => setPassword2(e.target.value)}
+                        />
+                    </div>
+                    {
+                        password !== Password2&&password.length>0 && (
+                            <p className="text-red-500 text-sm mt-2">
+                                Passwords do not match
+                            </p>
+                        )
+                    }
 
                     <Button type="submit" className="w-full" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Create Account'}

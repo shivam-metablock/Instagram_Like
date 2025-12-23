@@ -79,7 +79,7 @@ export const Plans: React.FC = () => {
                             <Zap size={16} /> Most Popular
                         </div>
                         <h2 className="text-4xl font-bold text-white mb-3">
-                            {platformFilter ? `${platformFilter} ` : ''}Instagram Reach Boost Plans
+                            {platformFilter ? `${platformFilter} ` : ''} Reach Boost Plans
                         </h2>
                         <p className="text-gray-400 text-lg">
                             {platformFilter
@@ -121,7 +121,7 @@ export const Plans: React.FC = () => {
                                     <div className="p-6 flex flex-col h-full">
                                         <div className="text-center mb-6">
                                             <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 ${getTypeColor(plan.type)} text-white`}>
-                                                REACH
+                                                {plan.type}
                                             </div>
                                             <div className="text-5xl font-bold text-white mb-2">₹{plan.price}</div>
                                             <div className="text-gray-400 text-sm">one-time payment</div>
@@ -171,9 +171,10 @@ export const Plans: React.FC = () => {
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.type)}`}>
                                             {plan.type}
                                         </span>
-                                        <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.platform)}`}>
-                                            {plan.platform}
-                                        </span>
+                                         <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white`}>
+                                             {plan.platform}
+                                            </div>
+                                    
                                         <div className="text-right">
                                             <div className="text-3xl font-bold text-white">₹{plan.price}</div>
                                             <div className="text-xs text-gray-400">one-time</div>

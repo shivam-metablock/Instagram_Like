@@ -56,9 +56,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 !sidebarOpen ? "-translate-x-full lg:w-20" : "translate-x-0"
             )}>
                 <div className="h-16 flex items-center justify-center border-b border-white/10">
-                    <h1 className={cn("font-bold text-xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent transition-opacity duration-300", !sidebarOpen && "lg:hidden")}>
-                        IG Simulator
-                    </h1>
+                       <img src="/logo.png" onClick={()=> navigate('/')} width={150} alt="LOGO" />
+                
                     <span className={cn("text-xl font-bold text-blue-500 absolute transition-opacity duration-300", sidebarOpen ? "opacity-0" : "opacity-100 hidden lg:block")}>IG</span>
                 </div>
 
