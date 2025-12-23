@@ -8,7 +8,7 @@ export const registerUser = async (req, res) => {
     try {
         const { name, number, password } = req.body;
 
-        const userExists = await User.findOne({ number });
+        const userExists = await User.findOne({number: number });
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
