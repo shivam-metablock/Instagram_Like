@@ -6,6 +6,7 @@ interface User {
     name: string;
     email: string;
     role: string;
+    number:string;
 }
 
 interface AuthContextType {
@@ -38,6 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             _id: data._id,
             name: data.name,
             email: data.email,
+            number:data.number,
             role: data.role
         };
         setUser(userData);
@@ -52,6 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             _id: data._id,
             name: data.name,
             email: data.email,
+            number:data.number,
             role: data.role
         };
         setUser(userData);

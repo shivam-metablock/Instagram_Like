@@ -1,42 +1,40 @@
 import React, { useState } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
-import { User, Bell, Lock, CreditCard, Mail, Smartphone } from 'lucide-react';
+import { User, CreditCard } from 'lucide-react';
 import { PaymentConfigForm } from '../components/settings/PaymentConfigForm';
 
 export const Settings: React.FC = () => {
     const { user } = useAuth();
-    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-    const [emailAlerts, setEmailAlerts] = useState(false);
-    const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+    
+    // const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
     const [profileData, setProfileData] = useState({
         name: user?.name || '',
-        email: user?.email || '',
+        number: user?.number || '',
     });
 
-    const [passwordData, setPasswordData] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-    });
+    // const [passwordData, setPasswordData] = useState({
+    //     currentPassword: '',
+    //     newPassword: '',
+    //     confirmPassword: '',
+    // });
 
     const handleProfileUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         alert('Profile updated! (Demo only)');
     };
 
-    const handlePasswordChange = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            alert('Passwords do not match!');
-            return;
-        }
-        alert('Password changed! (Demo only)');
-        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    };
+    // const handlePasswordChange = (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     if (passwordData.newPassword !== passwordData.confirmPassword) {
+    //         alert('Passwords do not match!');
+    //         return;
+    //     }
+    //     alert('Password changed! (Demo only)');
+    //     setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    // };
 
     return (
         <Layout>
@@ -60,19 +58,19 @@ export const Settings: React.FC = () => {
                             <label className="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
                             <input
                                 type="text"
+                                readOnly
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                 value={profileData.name}
-                                onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                            />
+                                   />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
                             <input
-                                type="email"
+                                type="number"
+                                readOnly
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
-                                value={profileData.email}
-                                onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-                            />
+                                value={profileData.number}
+                                   />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-2">User Role</label>
@@ -80,12 +78,12 @@ export const Settings: React.FC = () => {
                                 {user?.role || 'USER'}
                             </div>
                         </div>
-                        <Button type="submit">Save Changes</Button>
+                        {/* <Button type="submit">Save Changes</Button> */}
                     </form>
                 </Card>
 
                 {/* Security Settings */}
-                <Card>
+                {/* <Card>
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-2 bg-red-500/20 rounded-lg text-red-400">
                             <Lock size={20} />
@@ -144,10 +142,10 @@ export const Settings: React.FC = () => {
                             </label>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
                 {/* Notification Settings */}
-                <Card>
+                {/* <Card>
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
                             <Bell size={20} />
@@ -194,10 +192,10 @@ export const Settings: React.FC = () => {
                             </label>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
                 {/* Billing Info */}
-                <Card>
+                {/* <Card>
                     <div className="flex items-center gap-3 mb-6">
                         <div className="p-2 bg-purple-500/20 rounded-lg text-purple-400">
                             <CreditCard size={20} />
@@ -221,7 +219,7 @@ export const Settings: React.FC = () => {
                             <Button variant="outline" className="text-sm">View History</Button>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
 
                 {/* Admin Payment Configuration */}
                 {user?.role === 'ADMIN' && (
@@ -238,7 +236,7 @@ export const Settings: React.FC = () => {
                 )}
 
                 {/* Danger Zone */}
-                <Card className="border-red-500/20">
+                {/* <Card className="border-red-500/20">
                     <h3 className="text-xl font-bold text-red-400 mb-4">Danger Zone</h3>
                     <div className="space-y-3">
                         <div className="p-4 bg-red-500/10 rounded-lg border border-red-500/20">
@@ -251,7 +249,7 @@ export const Settings: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </Card>
+                </Card> */}
             </div>
         </Layout>
     );
