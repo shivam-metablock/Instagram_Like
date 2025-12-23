@@ -62,6 +62,10 @@ export const authAPI = {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
     },
+    updateMe: async (data: { name: string;number: string }) => {
+        const response = await api.post('/auth/me', data);
+        return response.data;
+    },
 };
 
 // Post API

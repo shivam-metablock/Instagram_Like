@@ -90,3 +90,19 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+export const updateMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        user.name = req.body.name || user.name;
+        user.number = req.body.number || user.number;
+        await user.save();
+        res.json({
+            _id: user._id,
+            name: user.name,
+            number: user.number,
+            role: user.role,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

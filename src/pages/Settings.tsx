@@ -4,9 +4,10 @@ import { Card } from '../components/ui/Card';
 import { useAuth } from '../context/AuthContext';
 import { User, CreditCard } from 'lucide-react';
 import { PaymentConfigForm } from '../components/settings/PaymentConfigForm';
+import { Button } from '../components/ui/Button';
 
 export const Settings: React.FC = () => {
-    const { user } = useAuth();
+    const { user,updateMe } = useAuth();
 
     const [profileData, setProfileData] = useState({
         name: user?.name || '',
@@ -16,7 +17,7 @@ export const Settings: React.FC = () => {
 
     const handleProfileUpdate = (e: React.FormEvent) => {
         e.preventDefault();
-        alert('Profile updated! (Demo only)');
+        updateMe(profileData)
     };
     useEffect(()=>{
        setProfileData({
@@ -48,18 +49,26 @@ export const Settings: React.FC = () => {
                             <label className="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
                             <input
                                 type="text"
-                                readOnly
+                                
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                 value={profileData.name}
+                                onChange={(e)=>setProfileData({
+                                    ...profileData,
+                                    name: e.target.value
+                                })}
                                    />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
                             <input
                                 type="number"
-                                readOnly
+                                
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                 value={profileData.number}
+                                onChange={(e)=>setProfileData({
+                                    ...profileData,
+                                    number: e.target.value
+                                })}
                                    />
                         </div>
                         <div>
@@ -68,7 +77,7 @@ export const Settings: React.FC = () => {
                                 {user?.role || 'USER'}
                             </div>
                         </div>
-                        {/* <Button type="submit">Save Changes</Button> */}
+                        <Button type="submit">Save Changes</Button>
                     </form>
                 </Card>
 
