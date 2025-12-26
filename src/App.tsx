@@ -18,8 +18,8 @@ import { Orders } from './pages/Orders';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -42,8 +42,8 @@ function App() {
           <Route path="/admin/orders" element={<ProtectedRoute requireAdmin={true}><Orders /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

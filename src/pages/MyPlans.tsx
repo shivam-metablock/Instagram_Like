@@ -3,7 +3,7 @@ import { Card } from '../components/ui/Card';
 // import { Badge } from '../components/ui/Badge';
 import { orderAPI } from '../services/api';
 import { ShoppingBag, TrendingUp, Calendar, Instagram, Facebook, Send, Youtube, InstagramIcon, YoutubeIcon, FacebookIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface Order {
     _id: string;
@@ -29,10 +29,10 @@ export const MyPlans: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedPlatform, setSelectedPlatform] = useState<PlatformType>('ALL');
-
+    const location = useLocation().pathname;
     useEffect(() => {
         fetchMyOrders();
-    }, []);
+    }, [location]);
 
     const fetchMyOrders = async () => {
         try {
@@ -82,7 +82,7 @@ export const MyPlans: React.FC = () => {
         <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-6">
                 {/* Sidebar - Platform Filter */}
-             
+
                 {/* Main Content */}
                 <div className="flex-1 space-y-8">
                     <div className="flex items-center justify-between">
@@ -267,121 +267,121 @@ export const MyPlans: React.FC = () => {
                         </div>
                     )}
                 </div>
-               
+
 
             </div>
-               {/* Filter Card */}
-                    <Card className="sticky top-4">
-                        <div className="p-4">
-                            <h3 className="text-lg font-bold text-white mb-4">Filter by Platform</h3>
-                            <div className="space-y-2">
-                                {/* All Platforms */}
-                                <button
-                                    onClick={() => setSelectedPlatform('ALL')}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'ALL'
-                                        ? 'bg-purple-500/20 border border-purple-500/40 text-white'
-                                        : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
-                                        }`}
-                                >
-                                    <ShoppingBag size={20} />
-                                    <span className="flex-1 text-left font-medium">All Platforms</span>
-                                    <span className="text-sm">{platformCounts.ALL}</span>
-                                </button>
+            {/* Filter Card */}
+            <Card className="sticky top-4">
+                <div className="p-4">
+                    <h3 className="text-lg font-bold text-white mb-4">Filter by Platform</h3>
+                    <div className="space-y-2">
+                        {/* All Platforms */}
+                        <button
+                            onClick={() => setSelectedPlatform('ALL')}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'ALL'
+                                ? 'bg-purple-500/20 border border-purple-500/40 text-white'
+                                : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                                }`}
+                        >
+                            <ShoppingBag size={20} />
+                            <span className="flex-1 text-left font-medium">All Platforms</span>
+                            <span className="text-sm">{platformCounts.ALL}</span>
+                        </button>
 
-                                {/* Instagram */}
-                                <button
-                                    onClick={() => setSelectedPlatform('INSTAGRAM')}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'INSTAGRAM'
-                                        ? 'bg-pink-500/20 border border-pink-500/40 text-white'
-                                        : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
-                                        }`}
-                                >
-                                    <Instagram size={20} className={selectedPlatform === 'INSTAGRAM' ? 'text-pink-400' : ''} />
-                                    <span className="flex-1 text-left font-medium">Instagram</span>
-                                    <span className="text-sm">{platformCounts.INSTAGRAM}</span>
-                                </button>
+                        {/* Instagram */}
+                        <button
+                            onClick={() => setSelectedPlatform('INSTAGRAM')}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'INSTAGRAM'
+                                ? 'bg-pink-500/20 border border-pink-500/40 text-white'
+                                : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                                }`}
+                        >
+                            <Instagram size={20} className={selectedPlatform === 'INSTAGRAM' ? 'text-pink-400' : ''} />
+                            <span className="flex-1 text-left font-medium">Instagram</span>
+                            <span className="text-sm">{platformCounts.INSTAGRAM}</span>
+                        </button>
 
-                                {/* Facebook */}
-                                <button
-                                    onClick={() => setSelectedPlatform('FACEBOOK')}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'FACEBOOK'
-                                        ? 'bg-blue-500/20 border border-blue-500/40 text-white'
-                                        : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
-                                        }`}
-                                >
-                                    <Facebook size={20} className={selectedPlatform === 'FACEBOOK' ? 'text-blue-500' : ''} />
-                                    <span className="flex-1 text-left font-medium">Facebook</span>
-                                    <span className="text-sm">{platformCounts.FACEBOOK}</span>
-                                </button>
+                        {/* Facebook */}
+                        <button
+                            onClick={() => setSelectedPlatform('FACEBOOK')}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'FACEBOOK'
+                                ? 'bg-blue-500/20 border border-blue-500/40 text-white'
+                                : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                                }`}
+                        >
+                            <Facebook size={20} className={selectedPlatform === 'FACEBOOK' ? 'text-blue-500' : ''} />
+                            <span className="flex-1 text-left font-medium">Facebook</span>
+                            <span className="text-sm">{platformCounts.FACEBOOK}</span>
+                        </button>
 
-                                {/* Telegram */}
-                                <button
-                                    onClick={() => setSelectedPlatform('TELEGRAM')}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'TELEGRAM'
-                                        ? 'bg-sky-500/20 border border-sky-500/40 text-white'
-                                        : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
-                                        }`}
-                                >
-                                    <Send size={20} className={selectedPlatform === 'TELEGRAM' ? 'text-sky-400' : ''} />
-                                    <span className="flex-1 text-left font-medium">Telegram</span>
-                                    <span className="text-sm">{platformCounts.TELEGRAM}</span>
-                                </button>
+                        {/* Telegram */}
+                        <button
+                            onClick={() => setSelectedPlatform('TELEGRAM')}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'TELEGRAM'
+                                ? 'bg-sky-500/20 border border-sky-500/40 text-white'
+                                : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                                }`}
+                        >
+                            <Send size={20} className={selectedPlatform === 'TELEGRAM' ? 'text-sky-400' : ''} />
+                            <span className="flex-1 text-left font-medium">Telegram</span>
+                            <span className="text-sm">{platformCounts.TELEGRAM}</span>
+                        </button>
 
-                                {/* YouTube */}
-                                <button
-                                    onClick={() => setSelectedPlatform('YOUTUBE')}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'YOUTUBE'
-                                        ? 'bg-red-500/20 border border-red-500/40 text-white'
-                                        : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
-                                        }`}
-                                >
-                                    <Youtube size={20} className={selectedPlatform === 'YOUTUBE' ? 'text-red-500' : ''} />
-                                    <span className="flex-1 text-left font-medium">YouTube</span>
-                                    <span className="text-sm">{platformCounts.YOUTUBE}</span>
-                                </button>
-                            </div>
-                        </div>
-                    </Card>
-                    {/* Buy Plans Card */}
-                    <Card className="sticky top-4  mt-4">
-                        <div className="p-4">
-                            <h3 className="text-lg font-bold text-white mb-4">Buy Plans</h3>
-                            <div className="space-y-2">
-                                <Link
-                                    to="/plans?platform=INSTAGRAM"
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white border border-pink-500/40"
-                                >
-                                    <InstagramIcon size={18} />
-                                    <span className="flex-1 text-left font-medium text-sm">Buy Instagram Plans</span>
-                                </Link>
+                        {/* YouTube */}
+                        <button
+                            onClick={() => setSelectedPlatform('YOUTUBE')}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${selectedPlatform === 'YOUTUBE'
+                                ? 'bg-red-500/20 border border-red-500/40 text-white'
+                                : 'bg-white/5 border border-white/10 text-gray-400 hover:bg-white/10'
+                                }`}
+                        >
+                            <Youtube size={20} className={selectedPlatform === 'YOUTUBE' ? 'text-red-500' : ''} />
+                            <span className="flex-1 text-left font-medium">YouTube</span>
+                            <span className="text-sm">{platformCounts.YOUTUBE}</span>
+                        </button>
+                    </div>
+                </div>
+            </Card>
+            {/* Buy Plans Card */}
+            <Card className="sticky top-4  mt-4">
+                <div className="p-4">
+                    <h3 className="text-lg font-bold text-white mb-4">Buy Plans</h3>
+                    <div className="space-y-2">
+                        <Link
+                            to="/plans?platform=INSTAGRAM"
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white border border-pink-500/40"
+                        >
+                            <InstagramIcon size={18} />
+                            <span className="flex-1 text-left font-medium text-sm">Buy Instagram Plans</span>
+                        </Link>
 
-                                <Link
-                                    to="/plans?platform=FACEBOOK"
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white border border-blue-500/40"
-                                >
-                                    <FacebookIcon size={18} />
-                                    <span className="flex-1 text-left font-medium text-sm">Buy Facebook Plans</span>
-                                </Link>
+                        <Link
+                            to="/plans?platform=FACEBOOK"
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white border border-blue-500/40"
+                        >
+                            <FacebookIcon size={18} />
+                            <span className="flex-1 text-left font-medium text-sm">Buy Facebook Plans</span>
+                        </Link>
 
-                                <Link
-                                    to="/plans?platform=TELEGRAM"
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white border border-sky-500/40"
-                                >
-                                    <Send size={18} />
-                                    <span className="flex-1 text-left font-medium text-sm">Buy Telegram Plans</span>
-                                </Link>
+                        <Link
+                            to="/plans?platform=TELEGRAM"
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white border border-sky-500/40"
+                        >
+                            <Send size={18} />
+                            <span className="flex-1 text-left font-medium text-sm">Buy Telegram Plans</span>
+                        </Link>
 
-                            
-                                <Link
-                                    to="/plans?platform=YOUTUBE"
-                                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white border border-red-500/40"
-                                >
-                                    <YoutubeIcon size={18} />
-                                    <span className="flex-1 text-left font-medium text-sm">Buy YouTube Plans</span>
-                                </Link>
-                            </div>
-                        </div>
-                    </Card>
+
+                        <Link
+                            to="/plans?platform=YOUTUBE"
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white border border-red-500/40"
+                        >
+                            <YoutubeIcon size={18} />
+                            <span className="flex-1 text-left font-medium text-sm">Buy YouTube Plans</span>
+                        </Link>
+                    </div>
+                </div>
+            </Card>
         </div>
     );
 };
