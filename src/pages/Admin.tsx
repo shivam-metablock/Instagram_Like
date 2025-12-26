@@ -134,7 +134,7 @@ export const Admin: React.FC = () => {
                                             {order.userId?.name || 'Unknown'}
                                         </td>
                                         <td className="px-4 py-3 text-gray-400">
-                                            {order.planId?.name || 'N/A'}
+                                            {order.planId?.name || 'Wallet'}
                                         </td>
                                         <td className="px-4 py-3 text-white font-bold">
                                             ₹{order.amount}
