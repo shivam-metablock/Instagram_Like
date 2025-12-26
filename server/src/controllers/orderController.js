@@ -13,7 +13,7 @@ export const getOrders = async (req, res) => {
             query.userId = req.user._id;
         }
 
-        const orders = await Order.find(query)
+        const orders = await Order.find({ ...query, status: { $ne: 'REJECTED' } })
             .populate('planId')
             .populate('userId', 'name email')
             .sort('-createdAt');

@@ -75,7 +75,7 @@ export const Orders = () => {
                                 <option value="">All</option>
                                 <option value="PENDING">Pending</option>
                                 <option value="APPROVED">Approved</option>
-                                <option value="REJECTED">Rejected</option>
+                                {/* <option value="REJECTED">Rejected</option> */}
                             </select>
                    </div>
                       </div>
