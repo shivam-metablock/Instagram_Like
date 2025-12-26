@@ -116,7 +116,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
                 {step === 1 && (
                     <div className="space-y-6 overflow-y-auto max-h-[70vh] p-2 custom-scrollbar">
                         <div className="text-center">
-                            <h3 className="text-2xl font-bold text-white mb-2">{isDeposit ? 'Add Funds' : 'Scan & Pay'}</h3>
+                            <h3 className="text-2xl font-bold text-white mb-2">
+                                {isDeposit ? 'Add Funds' : (!isDeposit && user && user.walletBalance >= plan.price ? 'Wallet Payment' : 'Scan & Pay')}
+                            </h3>
                             {!isDeposit ? (
                                 <p className="text-gray-400">Amount to Pay: <span className="text-white font-bold text-lg">₹{plan.price}</span></p>
                             ) : (
@@ -148,69 +150,68 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
                             </div>
                         )}
 
-                        {!isDeposit && (
-                            <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
-                                <p className="text-sm text-gray-400 mb-1">Your Wallet Balance</p>
-                                <p className="text-2xl font-bold text-purple-400">₹{user?.walletBalance || 0}</p>
-                            </div>
-                        )}
-
+                        {/* WALLET PAYMENT: Show only if enough balance and NOT a deposit */}
                         {!isDeposit && user && user.walletBalance >= plan.price ? (
-                            <Button
-                                onClick={() => processPayment('WALLET')}
-                                disabled={loading}
-                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
-                            >
-                                {loading ? 'Processing...' : 'Pay with Wallet'}
-                            </Button>
+                            <div className="space-y-6">
+                                <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
+                                    <p className="text-sm text-gray-400 mb-1">Your Wallet Balance</p>
+                                    <p className="text-2xl font-bold text-purple-400">₹{user?.walletBalance || 0}</p>
+                                </div>
+                                <Button
+                                    onClick={() => processPayment('WALLET')}
+                                    disabled={loading}
+                                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 h-14 text-lg"
+                                >
+                                    {loading ? 'Processing...' : 'Complete Payment with Wallet'}
+                                </Button>
+                            </div>
                         ) : (
-                            <div className="text-center text-sm text-amber-400 bg-amber-400/10 p-2 rounded-lg">
-                                Insufficient balance for wallet payment
-                            </div>
-                        )}
-
-                        {!isDeposit && (
-                            <div className="relative">
-                                <div className="absolute inset-0 flex items-center">
-                                    <span className="w-full border-t border-white/10"></span>
-                                </div>
-                                <div className="relative flex justify-center text-xs uppercase">
-                                    <span className="bg-black px-2 text-gray-500">Or Pay Online</span>
-                                </div>
-                            </div>
-                        )}
-
-                        {config ? (
-                            <div className="flex flex-col items-center gap-4 p-4 bg-white rounded-xl">
-                                {config.qrCodeUrl ? (
-                                    <img
-                                        src={config.qrCodeUrl.startsWith('http') ? config.qrCodeUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/${config.qrCodeUrl}`}
-                                        alt="QR Code"
-                                        className="w-48 h-48 object-contain"
-                                    />
-                                ) : (
-                                    <div className="w-48 h-48 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
-                                        No QR Code
+                            /* MANUAL PAYMENT: Show for deposits OR if wallet balance is low */
+                            <div className="space-y-6">
+                                {!isDeposit && (
+                                    <div className="relative">
+                                        <div className="absolute inset-0 flex items-center">
+                                            <span className="w-full border-t border-white/10"></span>
+                                        </div>
+                                        <div className="relative flex justify-center text-xs uppercase">
+                                            <span className="bg-black px-2 text-gray-500">Pay Manually</span>
+                                        </div>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg w-full justify-between">
-                                    <span className="text-black font-mono">{config.upiId || 'No UPI ID'}</span>
-                                    <button onClick={handleCopyUpi} className="text-blue-600 hover:text-blue-700">
-                                        <Copy size={18} />
-                                    </button>
+
+                                {config ? (
+                                    <div className="flex flex-col items-center gap-4 p-4 bg-white rounded-xl">
+                                        {config.qrCodeUrl ? (
+                                            <img
+                                                src={config.qrCodeUrl.startsWith('http') ? config.qrCodeUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/${config.qrCodeUrl}`}
+                                                alt="QR Code"
+                                                className="w-48 h-48 object-contain"
+                                            />
+                                        ) : (
+                                            <div className="w-48 h-48 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                                                No QR Code
+                                            </div>
+                                        )}
+                                        <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg w-full justify-between">
+                                            <span className="text-black font-mono">{config.upiId || 'No UPI ID'}</span>
+                                            <button onClick={handleCopyUpi} className="text-blue-600 hover:text-blue-700">
+                                                <Copy size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8 text-gray-400">Loading payment details...</div>
+                                )}
+
+                                <div className="text-sm text-gray-400 text-center px-4">
+                                    {config?.instructions || 'Scan the QR code or use the UPI ID to make the payment.'}
                                 </div>
+
+                                <Button onClick={() => setStep(2)} variant="outline" className="w-full">
+                                    I have made the payment
+                                </Button>
                             </div>
-                        ) : (
-                            <div className="text-center py-8 text-gray-400">Loading payment details...</div>
                         )}
-
-                        <div className="text-sm text-gray-400 text-center px-4">
-                            {config?.instructions || 'Scan the QR code or use the UPI ID to make the payment.'}
-                        </div>
-
-                        <Button onClick={() => setStep(2)} variant="outline" className="w-full">
-                            I have made the payment
-                        </Button>
 
 
                     </div>

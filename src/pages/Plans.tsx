@@ -8,13 +8,14 @@ import { Check, Zap, Star } from 'lucide-react';
 import { PaymentModal } from '../components/plans/PaymentModal';
 import { useSearchParams } from 'react-router-dom';
 import { getTypeColor } from '../utils/color';
+import { getPlatformLabel } from '../utils/planMapping';
 
 interface Plan {
     _id: string;
     name: string;
     description: string;
     price: number;
-    
+
     features: string[];
     type: string;
     platform: string;
@@ -67,7 +68,7 @@ export const Plans: React.FC = () => {
         }, 3000);
     };
 
-  
+
 
     return (
         <Layout>
@@ -121,7 +122,7 @@ export const Plans: React.FC = () => {
                                     <div className="p-6 flex flex-col h-full">
                                         <div className="text-center mb-6">
                                             <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 ${getTypeColor(plan.type)} text-white`}>
-                                                {plan.type}
+                                                {getPlatformLabel(plan.platform, plan.type)}
                                             </div>
                                             <div className="text-5xl font-bold text-white mb-2">₹{plan.price}</div>
                                             <div className="text-gray-400 text-sm">one-time payment</div>
@@ -132,15 +133,15 @@ export const Plans: React.FC = () => {
 
                                         <div className="space-y-3 mb-6">
                                             <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.platform)}`}>
-                                            {plan.platform}
-                                        </span>
+                                                {plan.platform}
+                                            </span>
                                             {plan.features.map((feature, idx) => (
                                                 <div key={idx} className="flex items-center gap-2 text-sm text-gray-300">
                                                     <Check size={16} className="text-green-400 flex-shrink-0" />
                                                     <span>{feature}</span>
                                                 </div>
                                             ))}
-                                        
+
                                         </div>
 
                                         <Button
@@ -169,12 +170,12 @@ export const Plans: React.FC = () => {
                                 <Card key={plan._id} className="flex flex-col h-full">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getTypeColor(plan.type)}`}>
-                                            {plan.type}
+                                            {getPlatformLabel(plan.platform, plan.type)}
                                         </div>
-                                         <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold  bg-gradient-to-r from-purple-500 to-pink-500 text-white`}>
-                                             {plan.platform}
-                                            </div>
-                                    
+                                        <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold  bg-gradient-to-r from-purple-500 to-pink-500 text-white`}>
+                                            {plan.platform}
+                                        </div>
+
                                         <div className="text-right">
                                             <div className="text-3xl font-bold text-white">₹{plan.price}</div>
                                             <div className="text-xs text-gray-400">one-time</div>
@@ -195,9 +196,9 @@ export const Plans: React.FC = () => {
 
                                     <Button
                                         onClick={() => handlePurchaseClick(plan)}
-                                       
+
                                         className={`w-full from-purple-500 hover:to-pink-500`}
-                                      
+
                                     >
                                         Purchase Now
                                     </Button>
@@ -207,7 +208,7 @@ export const Plans: React.FC = () => {
                     </div>
                 )}
 
-           
+
                 {/* Payment Modal */}
                 {selectedPlan && (
                     <PaymentModal

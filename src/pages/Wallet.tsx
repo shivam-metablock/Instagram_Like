@@ -6,7 +6,7 @@ import { Button } from '../components/ui/Button';
 import { Wallet as WalletIcon, Plus, History, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { PaymentModal } from '../components/plans/PaymentModal';
-import { walletAPI } from '../services/api';
+import { walletAPI, orderAPI } from '../services/api';
 
 export const Wallet: React.FC = () => {
     const { user } = useAuth();
@@ -22,8 +22,36 @@ export const Wallet: React.FC = () => {
     const fetchTransactions = async () => {
         try {
             setLoading(true);
-            const data = await walletAPI.getTransactions();
-            setTransactions(data);
+            const [txData, orderData] = await Promise.all([
+                walletAPI.getTransactions(),
+                orderAPI.getMyOrders()
+            ]);
+
+            // Transform wallet transactions
+            const walletTx = txData.map((tx: any) => ({
+                ...tx,
+                displayType: tx.type === 'DEPOSIT' ? 'QR' : 'WALLET'
+            }));
+
+            // Transform orders into transaction-like objects
+            // Only include non-wallet orders to avoid duplicates (wallet orders create a 'PURCHASE' transaction already)
+            const manualOrders = orderData
+                .filter((order: any) => order.utr !== 'WALLET_PAYMENT')
+                .map((order: any) => ({
+                    _id: order._id,
+                    displayType: 'QR',
+                    amount: order.amount,
+                    status: order.status,
+                    description: `Plan Purchase: ${order.planId?.name || 'Manual Order'}`,
+                    createdAt: order.createdAt,
+                    type: 'MANUAL_PURCHASE' // Keep internal type for color logic
+                }));
+
+            const combined = [...walletTx, ...manualOrders].sort((a, b) =>
+                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+
+            setTransactions(combined);
         } catch (err) {
             console.error('Failed to fetch transactions');
         } finally {
@@ -36,14 +64,14 @@ export const Wallet: React.FC = () => {
         <Layout>
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* Balance Card */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="bg-gradient-to-br from-purple-600 to-indigo-700 border-none shadow-xl shadow-purple-500/20">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <Card className="bg-slate-800/50 border-white/10 flex flex-col justify-center p-8 text-center space-y-4">
                         <div className="p-8">
                             <div className="flex items-center justify-between mb-8">
                                 <div className="p-3 bg-white/10 rounded-2xl">
                                     <WalletIcon className="text-white" size={32} />
                                 </div>
-                                <span className="text-white/60 text-sm font-medium">Digital Wallet</span>
+                                <span className="text-white/60 text-sm font-medium"> Wallet</span>
                             </div>
                             <div className="space-y-1">
                                 <p className="text-white/60 text-sm uppercase tracking-wider">Available Balance</p>
@@ -116,9 +144,10 @@ export const Wallet: React.FC = () => {
                                                 <td className="px-6 py-4">
                                                     <span className={cn(
                                                         "text-xs font-bold px-2.5 py-1 rounded-full",
-                                                        tx.type === 'DEPOSIT' ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"
+                                                        tx.displayType === 'QR' ? "bg-blue-500/10 text-blue-400" :
+                                                            "bg-purple-500/10 text-purple-400"
                                                     )}>
-                                                        {tx.type}
+                                                        {tx.displayType}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-white text-sm">{tx.description}</td>
@@ -134,7 +163,7 @@ export const Wallet: React.FC = () => {
                                                         tx.status === 'APPROVED' ? "text-green-400" :
                                                             tx.status === 'PENDING' ? "text-amber-400" : "text-red-400"
                                                     )}>
-                                                        ● {tx.status}
+                                                        {tx.status}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-400 text-sm">

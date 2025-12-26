@@ -190,7 +190,7 @@ export const MyPlans: React.FC = () => {
                                                             {order.status}
                                                         </Badge>
                                                         <Badge variant={order.planId.type === 'VIEWS' ? 'success' : 'default'}>
-                                                            {order.planId.type}
+                                                            {getPlatformLabel(order.planId.platform, order.planId.type)}
                                                         </Badge>
                                                        
                                                         <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${platformDetails.bgColor} ${platformDetails.borderColor}`}>
@@ -236,7 +236,9 @@ export const MyPlans: React.FC = () => {
                                                         )}
                                                         {order.planId.followersCount && (
                                                             <div className="flex items-center justify-between">
-                                                                <span className="text-sm text-gray-400">Followers</span>
+                                                                <span className="text-sm text-gray-400">
+                                                                    {order.planId.platform === 'YOUTUBE' ? 'Subs' : order.planId.platform === 'TELEGRAM' ? 'Members' : 'Followers'}
+                                                                </span>
                                                                 <span className="text-lg font-bold text-purple-400">
                                                                     {order.planId.followersCount.toLocaleString()}
                                                                 </span>

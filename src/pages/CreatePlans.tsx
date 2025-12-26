@@ -5,6 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { planAPI } from '../services/api';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import { PLATFORM_SERVICES } from '../utils/planMapping';
 
 interface Plan {
     _id: string;
@@ -160,24 +161,15 @@ export const CreatePlans: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-2">Plan Type</label>
-                                    <select
-                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-black"
-                                        value={formData.type}
-                                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                    >
-                                        <option value="VIEWS">Views Boost</option>
-                                        <option value="LIKES">Likes Boost</option>
-                                        <option value="FOLLOWERS">Followers Boost</option>
-                                        <option value="BUNDLE">Bundle(like+followers+views)</option>
-                                    </select>
-                                </div>
-                                <div>
                                     <label className="block text-sm font-medium text-gray-400 mb-2">Platform</label>
                                     <select
                                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-black"
                                         value={formData.platform}
-                                        onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
+                                        onChange={(e) => {
+                                            const newPlatform = e.target.value;
+                                            const firstAvailableType = PLATFORM_SERVICES[newPlatform]?.[0]?.value || 'VIEWS';
+                                            setFormData({ ...formData, platform: newPlatform, type: firstAvailableType });
+                                        }}
                                     >
                                         <option value="INSTAGRAM">Instagram</option>
                                         <option value="FACEBOOK">Facebook</option>
@@ -185,43 +177,63 @@ export const CreatePlans: React.FC = () => {
                                         <option value="TELEGRAM">Telegram</option>
                                     </select>
                                 </div>
-                                {formData.type === 'VIEWS' || formData.type === 'BUNDLE' ? (
-                                    <>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-400 mb-2">Reach Count</label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
-                                                value={formData.viewsCount}
-                                                onChange={(e) => setFormData({ ...formData, viewsCount: Number(e.target.value) })}
-                                                placeholder="e.g., 10000"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-400 mb-2">Likes Count</label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
-                                                value={formData.likesCount}
-                                                onChange={(e) => setFormData({ ...formData, likesCount: Number(e.target.value) })}
-                                                placeholder="e.g., 500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-400 mb-2">Followers Count</label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
-                                                value={formData.followersCount}
-                                                onChange={(e) => setFormData({ ...formData, followersCount: Number(e.target.value) })}
-                                                placeholder="e.g., 100"
-                                            />
-                                        </div>
-                                    </>
-                                ) : null}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-400 mb-2">Plan Type</label>
+                                    <select
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-black"
+                                        value={formData.type}
+                                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                    >
+                                        {PLATFORM_SERVICES[formData.platform]?.map(service => (
+                                            <option key={service.value} value={service.value}>{service.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Dynamic Count Fields */}
+                                {(formData.type === 'VIEWS' || formData.type === 'BUNDLE') && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-2">Reach / Views Count</label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
+                                            value={formData.viewsCount}
+                                            onChange={(e) => setFormData({ ...formData, viewsCount: Number(e.target.value) })}
+                                            placeholder="e.g., 10000"
+                                        />
+                                    </div>
+                                )}
+
+                                {(formData.type === 'LIKES' || formData.type === 'BUNDLE') && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-2">Likes Count</label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
+                                            value={formData.likesCount}
+                                            onChange={(e) => setFormData({ ...formData, likesCount: Number(e.target.value) })}
+                                            placeholder="e.g., 500"
+                                        />
+                                    </div>
+                                )}
+
+                                {(formData.type === 'FOLLOWERS' || formData.type === 'BUNDLE') && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                                            {formData.platform === 'YOUTUBE' ? 'Subscribers' : formData.platform === 'TELEGRAM' ? 'Members' : 'Followers'} Count
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
+                                            value={formData.followersCount}
+                                            onChange={(e) => setFormData({ ...formData, followersCount: Number(e.target.value) })}
+                                            placeholder="e.g., 100"
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -285,7 +297,7 @@ export const CreatePlans: React.FC = () => {
                                             <div className="flex items-center gap-3 mb-2">
                                                 <h4 className="text-white font-medium text-lg">{plan.name}</h4>
                                                 <Badge variant={plan.type === 'VIEWS' ? 'success' : 'default'}>
-                                                    {plan.type}
+                                                    {PLATFORM_SERVICES[plan.platform || 'INSTAGRAM']?.find(s => s.value === plan.type)?.label || plan.type}
                                                 </Badge>
                                                 <Badge variant={plan.platform === 'INSTAGRAM' ? 'default' : plan.platform === 'FACEBOOK' ? 'default' : plan.platform === 'YOUTUBE' ? 'danger' : 'default'}>
                                                     {plan.platform || 'INSTAGRAM'}
@@ -293,7 +305,11 @@ export const CreatePlans: React.FC = () => {
                                                 <div className="text-white font-bold">₹{plan.price}</div>
                                                 {plan.viewsCount ? <span className="text-sm text-blue-400">({plan.viewsCount.toLocaleString()} Reach)</span> : null}
                                                 {plan.likesCount ? <span className="text-sm text-pink-400">({plan.likesCount.toLocaleString()} Likes)</span> : null}
-                                                {plan.followersCount ? <span className="text-sm text-purple-400">({plan.followersCount.toLocaleString()} Follows)</span> : null}
+                                                {plan.followersCount ? (
+                                                    <span className="text-sm text-purple-400">
+                                                        ({plan.followersCount.toLocaleString()} {plan.platform === 'YOUTUBE' ? 'Subs' : plan.platform === 'TELEGRAM' ? 'Members' : 'Follows'})
+                                                    </span>
+                                                ) : null}
                                             </div>
                                             <p className="text-sm text-gray-400 mb-2">{plan.description}</p>
                                             <div className="flex flex-wrap gap-2">
