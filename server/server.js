@@ -24,7 +24,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'https://instagram-like.onrender.com', 
+    origin: 'https://instagram-like-eta.vercel.app', 
     credentials: true,
 }));
 app.use(express.json());
