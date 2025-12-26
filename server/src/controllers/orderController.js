@@ -1,6 +1,7 @@
 import Order from '../models/Order.js';
 import User from '../models/User.js';
 import WalletTransaction from '../models/WalletTransaction.js';
+import mongoose from 'mongoose';
 
 // @desc    Get user orders
 // @route   GET /api/orders
@@ -66,13 +67,17 @@ export const createOrder = async (req, res) => {
             user.walletBalance -= Number(amount);
             await user.save();
 
+            // Fetch plan details for description
+            const plan = await mongoose.model('Plan').findById(planId);
+            const planName = plan ? `${plan.platform} - ${plan.name}` : planId;
+
             // Create purchase transaction
             await WalletTransaction.create({
                 userId: req.user._id,
                 amount: Number(amount),
                 type: 'PURCHASE',
                 status: 'APPROVED',
-                description: `Purchase of plan ${planId}`
+                description: `Purchase of plan: ${planName}`
             });
 
             status = 'APPROVED'; // Mark as approved if paid by wallet

@@ -35,7 +35,7 @@ export const Orders = () => {
         setLoading(true);
         try {
             await orderAPI.updateStatus(orderId, 'APPROVED');
-          await  fetchData()
+            await fetchData()
 
         } catch (error) {
             alert('Failed to approve order');
@@ -63,13 +63,13 @@ export const Orders = () => {
 
             {pendingOrders.length > 0 && (
                 <Card className="border-yellow-500/30">
-                   <div className=" flex items-center justify-between">
-                     <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">Orders
-                    </h3>
-                   <div className="flex items-center gap-2">
-                 <select
-                            
-                                onChange={(e) =>e.target.value==""?setOrders(CopyOrders):setOrders(CopyOrders.filter((order) => String(order.status) === e.target.value)) }
+                    <div className=" flex items-center justify-between">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">Orders
+                        </h3>
+                        <div className="flex items-center gap-2">
+                            <select
+
+                                onChange={(e) => e.target.value == "" ? setOrders(CopyOrders) : setOrders(CopyOrders.filter((order) => String(order.status) === e.target.value))}
                                 className="bg-slate-800 text-white text-xs border border-white/10 rounded px-2 py-1 focus:outline-none focus:border-purple-500"
                             >
                                 <option value="">All</option>
@@ -77,8 +77,8 @@ export const Orders = () => {
                                 <option value="APPROVED">Approved</option>
                                 {/* <option value="REJECTED">Rejected</option> */}
                             </select>
-                   </div>
-                      </div>
+                        </div>
+                    </div>
 
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
@@ -99,7 +99,21 @@ export const Orders = () => {
                                     <React.Fragment key={order._id}>
                                         <tr className="hover:bg-white/5">
                                             <td className="px-4 py-3 text-white">{order.userId?.name || 'Unknown'}</td>
-                                            <td className="px-4 py-3 text-gray-400">{order.planId?.name || 'N/A'}</td>
+                                            <td className="px-4 py-3">
+                                                <div className="flex flex-col">
+                                                    <span className="text-white font-medium">{order.planId?.name || 'Wallet'}</span>
+                                                    {order.planId && (
+                                                        <div className="flex gap-1 mt-1">
+                                                            <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 rounded border border-blue-500/20">
+                                                                {order.planId.platform}
+                                                            </span>
+                                                            <span className="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 rounded border border-purple-500/20">
+                                                                {order.planId.type}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
                                             <td className="px-4 py-3 text-white font-bold">₹{order.amount}</td>
                                             <td className="px-4 py-3 font-mono text-xs text-yellow-400">{order.utr || '-'}</td>
                                             <td className="px-4 py-3">
@@ -118,25 +132,25 @@ export const Orders = () => {
                                             <td className="px-4 py-3 text-white">{order.video || 'Unknown'}</td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex items-center justify-end gap-2">
-                                                  {order.status=="PENDING"&&
-                                                    <>
-                                                      <Button
-                                                        onClick={() => handleApprove(order._id)}
-                                                        className="bg-green-600 hover:bg-green-500 h-8 px-3 py-1 flex items-center justify-center"
-                                                        disabled={loading}
-                                                    >
-                                                        <Check size={14} />
-                                                    </Button>
-                                                    <Button
-                                                        variant="danger"
-                                                        onClick={() => setRejectingOrder(order._id)}
-                                                        className="h-8 px-3 py-1 flex items-center justify-center"
-                                                        disabled={loading}
-                                                    >
-                                                        <X size={14} />
-                                                    </Button>
-                                                    </>
-                                                  }
+                                                    {order.status == "PENDING" &&
+                                                        <>
+                                                            <Button
+                                                                onClick={() => handleApprove(order._id)}
+                                                                className="bg-green-600 hover:bg-green-500 h-8 px-3 py-1 flex items-center justify-center"
+                                                                disabled={loading}
+                                                            >
+                                                                <Check size={14} />
+                                                            </Button>
+                                                            <Button
+                                                                variant="danger"
+                                                                onClick={() => setRejectingOrder(order._id)}
+                                                                className="h-8 px-3 py-1 flex items-center justify-center"
+                                                                disabled={loading}
+                                                            >
+                                                                <X size={14} />
+                                                            </Button>
+                                                        </>
+                                                    }
                                                 </div>
                                             </td>
 

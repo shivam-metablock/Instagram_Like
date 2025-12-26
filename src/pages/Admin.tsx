@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { orderAPI, proxyAPI, userAPI } from '../services/api';
-import { Users, ShoppingBag, Globe, IndianRupee} from 'lucide-react';
+import { Users, ShoppingBag, Globe, IndianRupee } from 'lucide-react';
 
 export const Admin: React.FC = () => {
     const [orders, setOrders] = useState<any[]>([]);
@@ -14,9 +14,9 @@ export const Admin: React.FC = () => {
         getuserLength()
     }, []);
 
-    const getuserLength=async()=>{
+    const getuserLength = async () => {
         try {
-            const userLength=await userAPI.getLength()
+            const userLength = await userAPI.getLength()
             setUserLength(userLength.data)
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -35,7 +35,7 @@ export const Admin: React.FC = () => {
         }
     };
 
-  
+
 
 
     const getStatusColor = (status: string) => {
@@ -107,7 +107,7 @@ export const Admin: React.FC = () => {
                 </div>
 
                 {/* Pending Orders Section */}
-              
+
 
                 {/* All Orders */}
                 <Card>
@@ -121,6 +121,7 @@ export const Admin: React.FC = () => {
                                     <th className="px-4 py-3">Plan</th>
                                     <th className="px-4 py-3">Amount</th>
                                     <th className="px-4 py-3">Status</th>
+                                    <th className="px-4 py-3">Video/Link</th>
                                     <th className="px-4 py-3">Date</th>
                                 </tr>
                             </thead>
@@ -133,8 +134,20 @@ export const Admin: React.FC = () => {
                                         <td className="px-4 py-3 text-white">
                                             {order.userId?.name || 'Unknown'}
                                         </td>
-                                        <td className="px-4 py-3 text-gray-400">
-                                            {order.planId?.name || 'Wallet'}
+                                        <td className="px-4 py-3">
+                                            <div className="flex flex-col">
+                                                <span className="text-white font-medium">{order.planId?.name || 'Wallet'}</span>
+                                                {order.planId && (
+                                                    <div className="flex gap-1 mt-1">
+                                                        <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 rounded border border-blue-500/20">
+                                                            {order.planId.platform}
+                                                        </span>
+                                                        <span className="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 rounded border border-purple-500/20">
+                                                            {order.planId.type}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-4 py-3 text-white font-bold">
                                             ₹{order.amount}
@@ -143,6 +156,20 @@ export const Admin: React.FC = () => {
                                             <span className={`px-2 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
                                                 {order.status}
                                             </span>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            {order.video ? (
+                                                <a
+                                                    href={order.video.startsWith('http') ? order.video : `https://${order.video}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-400 hover:text-blue-300 text-xs truncate max-w-[150px] inline-block"
+                                                >
+                                                    {order.video}
+                                                </a>
+                                            ) : (
+                                                <span className="text-gray-600 text-xs">N/A</span>
+                                            )}
                                         </td>
                                         <td className="px-4 py-3 text-gray-400">
                                             {new Date(order.createdAt).toLocaleDateString()}
@@ -158,9 +185,9 @@ export const Admin: React.FC = () => {
                 </Card>
 
                 {/* Modals */}
-             
 
-             
+
+
             </div>
         </Layout>
     );
