@@ -78,7 +78,7 @@ export const AdminLogin: React.FC = () => {
                                 type="number"
                                 required
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500/50"
-                                placeholder="admin@example.com"
+                                placeholder="1234567890"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             />
