@@ -3,7 +3,7 @@ import { Card } from '../components/ui/Card';
 // import { Badge } from '../components/ui/Badge';
 import { orderAPI } from '../services/api';
 import { ShoppingBag, TrendingUp, Calendar, Instagram, Facebook, Send, Youtube, InstagramIcon, YoutubeIcon, FacebookIcon } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface Order {
     _id: string;
@@ -29,10 +29,10 @@ export const MyPlans: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedPlatform, setSelectedPlatform] = useState<PlatformType>('ALL');
-const location=useLocation().pathname;
+
     useEffect(() => {
         fetchMyOrders();
-    }, [location]);
+    }, []);
 
     const fetchMyOrders = async () => {
         try {

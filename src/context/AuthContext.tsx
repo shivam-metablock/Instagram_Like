@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 interface  User {
     _id: string;
@@ -24,6 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const navigate=useNavigate();
     useEffect(() => {
         // Check for stored user on mount
       
@@ -67,6 +69,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const getSelf = async () => {
         const data = await authAPI.getMe();
+        if(data.message=="Not authorized, no token"){
+            return navigate('/login');
+        }
         setUser(data);
         setLoading(false);
     };
