@@ -6,6 +6,7 @@ interface User {
     name: string;
     role: string;
     number: string;
+    walletBalance: number;
 }
 
 interface AuthContextType {
@@ -33,11 +34,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const data = await authAPI.login({ email, password });
-            const userData = {
+            const userData: User = {
                 _id: data._id,
                 name: data.name,
                 number: data.number,
-                role: data.role
+                role: data.role,
+                walletBalance: data.walletBalance || 0
             };
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));
@@ -51,11 +53,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             const data = await authAPI.register({ name, password, number });
-            const userData = {
+            const userData: User = {
                 _id: data._id,
                 name: data.name,
                 number: data.number,
-                role: data.role
+                role: data.role,
+                walletBalance: data.walletBalance || 0
             };
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));

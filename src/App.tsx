@@ -15,6 +15,8 @@ import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { UsersVideo } from './pages/SeeUserView';
 import { Orders } from './pages/Orders';
+import { Wallet } from './pages/Wallet';
+import { WalletRequests } from './pages/WalletRequests';
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
           <Route path="/proxies" element={<ProtectedRoute><ProxyList /></ProtectedRoute>} />
           <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
           {/* <Route path="/my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} /> */}
+          <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
           {/* Admin Only Route */}
@@ -40,6 +43,7 @@ function App() {
           <Route path="/admin/users" element={<ProtectedRoute requireAdmin={true}><ManageUsers /></ProtectedRoute>} />
           <Route path="/admin/videos" element={<ProtectedRoute requireAdmin={true}><UsersVideo /></ProtectedRoute>} />
           <Route path="/admin/orders" element={<ProtectedRoute requireAdmin={true}><Orders /></ProtectedRoute>} />
+          <Route path="/admin/wallet-requests" element={<ProtectedRoute requireAdmin={true}><WalletRequests /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AuthProvider>

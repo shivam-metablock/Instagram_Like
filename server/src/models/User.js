@@ -11,19 +11,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    AccountName:{
-        type:String,
+    AccountName: {
+        type: String,
     },
-    AccountLink:{
-        type:String,
+    AccountLink: {
+        type: String,
     },
     role: {
         type: String,
         enum: ['USER', 'ADMIN'],
         default: 'USER',
     },
-    number:{
-        type:String,
+    number: {
+        type: String,
+    },
+    walletBalance: {
+        type: Number,
+        default: 0,
     }
 }, {
     timestamps: true,

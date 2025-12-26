@@ -62,7 +62,7 @@ export const authAPI = {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
     },
-    updateMe: async (data: { name: string;number: string }) => {
+    updateMe: async (data: { name: string; number: string }) => {
         const response = await api.post('/auth/me', data);
         return response.data;
     },
@@ -137,11 +137,10 @@ export const orderAPI = {
         return response.data;
     },
 
-    create: async (data: FormData) => {
+    create: async (data: any) => {
+        const isFormData = data instanceof FormData;
         const response = await api.post('/orders', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+            headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : {}
         });
         return response.data;
     },
@@ -193,6 +192,16 @@ export const configAPI = {
         });
         return response.data;
     }
+};
+
+
+export const walletAPI = {
+    deposit: (data: FormData) => api.post('/wallet/deposit', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    getTransactions: () => api.get('/wallet/transactions').then(res => res.data),
+    getPending: () => api.get('/wallet/pending').then(res => res.data),
+    handleStatus: (id: string, status: string) => api.put(`/wallet/deposit/${id}`, { status }).then(res => res.data),
 };
 
 export default api;

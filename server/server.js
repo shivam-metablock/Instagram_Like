@@ -11,6 +11,7 @@ import orderRoutes from './src/routes/orderRoutes.js';
 import proxyRoutes from './src/routes/proxyRoutes.js';
 import configRoutes from './src/routes/configRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
+import walletRoutes from './src/routes/walletRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'https://instagram-like-eta.vercel.app', 
+    origin: ['https://instagram-like-eta.vercel.app','http://localhost:5173'],
     credentials: true,
 }));
 app.use(express.json());
@@ -37,7 +38,8 @@ app.use('/api/plans', planRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/proxies', proxyRoutes);
 app.use('/api/config', configRoutes);
-app.use('/api/users',userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/wallet', walletRoutes);
 
 // Serve static files
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -59,6 +61,8 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(()=>{app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-})})
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    })
+})

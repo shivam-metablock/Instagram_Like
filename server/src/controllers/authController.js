@@ -53,7 +53,7 @@ export const loginUser = async (req, res) => {
                 token: generateToken(user._id),
             });
         } else {
-            res.status(401).json({ message: 'Invalid email or password' });
+            res.status(401).json({ message: 'Invalid number or password' });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -68,6 +68,8 @@ export const getMe = async (req, res) => {
             name: user.name,
             number: user.number,
             role: user.role,
+            walletBalance: user.walletBalance,
+
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { X, Upload, CheckCircle, Copy } from 'lucide-react';
-import { configAPI, orderAPI } from '../../services/api';
+import { configAPI, orderAPI, walletAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 interface PaymentModalProps {
-    plan: any;
+    plan?: any;
+    isDeposit?: boolean;
     onClose: () => void;
     onSuccess: () => void;
 }
 
-export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuccess }) => {
+export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onClose, onSuccess }) => {
     const [step, setStep] = useState(1);
     const [config, setConfig] = useState<any>(null);
     const [utr, setUtr] = useState('');
@@ -18,6 +20,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [video, setVideo] = useState('');
+    const [amount, setAmount] = useState(plan?.price?.toString() || '');
+    const { user } = useAuth();
 
     useEffect(() => {
         loadConfig();
@@ -41,8 +45,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!utr || !screenshot) {
+        await processPayment('ONLINE');
+    };
+
+    const processPayment = async (method: 'ONLINE' | 'WALLET') => {
+        if (method === 'ONLINE' && (!utr || !screenshot)) {
             setError('Please provide both UTR and Screenshot');
+            return;
+        }
+        if (isDeposit && !amount) {
+            setError('Please enter an amount');
+            return;
+        }
+        if (!isDeposit && !video) {
+            setError('Please provide a Video / Profile URL');
             return;
         }
 
@@ -50,14 +66,31 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
         setError('');
 
         try {
-            const formData = new FormData();
-            formData.append('planId', plan._id);
-            formData.append('amount', plan.price.toString());
-            formData.append('utr', utr);
-            formData.append('screenshot', screenshot);
-            formData.append('video', video);
+            if (isDeposit) {
+                const formData = new FormData();
+                formData.append('amount', amount);
+                formData.append('utr', utr);
+                formData.append('screenshot', screenshot!);
+                await walletAPI.deposit(formData);
+            } else if (method === 'WALLET') {
+                await orderAPI.create({
+                    planId: plan._id,
+                    amount: plan.price.toString(),
+                    video: video,
+                    paymentMethod: 'WALLET'
+                });
+            } else {
+                const formData = new FormData();
+                formData.append('planId', plan._id);
+                formData.append('amount', plan.price.toString());
+                formData.append('utr', utr);
+                formData.append('screenshot', screenshot!);
+                formData.append('video', video);
+                formData.append('paymentMethod', 'ONLINE');
 
-            await orderAPI.create(formData);
+                await orderAPI.create(formData);
+            }
+
             setStep(3); // Success step
             setTimeout(() => {
                 onSuccess();
@@ -68,7 +101,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
         }
     };
 
-    if (!plan) return null;
+    if (!plan && !isDeposit) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
@@ -81,11 +114,71 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
                 </button>
 
                 {step === 1 && (
-                    <div className="space-y-6">
+                    <div className="space-y-6 overflow-y-auto max-h-[70vh] p-2 custom-scrollbar">
                         <div className="text-center">
-                            <h3 className="text-2xl font-bold text-white mb-2">Scan & Pay</h3>
-                            <p className="text-gray-400">Amount to Pay: <span className="text-white font-bold text-lg">₹{plan.price}</span></p>
+                            <h3 className="text-2xl font-bold text-white mb-2">{isDeposit ? 'Add Funds' : 'Scan & Pay'}</h3>
+                            {!isDeposit ? (
+                                <p className="text-gray-400">Amount to Pay: <span className="text-white font-bold text-lg">₹{plan.price}</span></p>
+                            ) : (
+                                <div className="mt-4">
+                                    <label className="block text-sm font-medium text-gray-400 mb-2">Deposit Amount (₹)</label>
+                                    <input
+                                        type="number"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white text-center text-xl font-bold focus:outline-none focus:border-purple-500/50"
+                                        placeholder="Enter amount"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            )}
                         </div>
+
+                        {!isDeposit && (
+                            <div className="space-y-2 px-2">
+                                <label className="block text-sm font-medium text-gray-400">Video / Profile URL</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500/50"
+                                    placeholder="Enter your link here"
+                                    value={video}
+                                    onChange={(e) => setVideo(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        )}
+
+                        {!isDeposit && (
+                            <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
+                                <p className="text-sm text-gray-400 mb-1">Your Wallet Balance</p>
+                                <p className="text-2xl font-bold text-purple-400">₹{user?.walletBalance || 0}</p>
+                            </div>
+                        )}
+
+                        {!isDeposit && user && user.walletBalance >= plan.price ? (
+                            <Button
+                                onClick={() => processPayment('WALLET')}
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                            >
+                                {loading ? 'Processing...' : 'Pay with Wallet'}
+                            </Button>
+                        ) : (
+                            <div className="text-center text-sm text-amber-400 bg-amber-400/10 p-2 rounded-lg">
+                                Insufficient balance for wallet payment
+                            </div>
+                        )}
+
+                        {!isDeposit && (
+                            <div className="relative">
+                                <div className="absolute inset-0 flex items-center">
+                                    <span className="w-full border-t border-white/10"></span>
+                                </div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                    <span className="bg-black px-2 text-gray-500">Or Pay Online</span>
+                                </div>
+                            </div>
+                        )}
 
                         {config ? (
                             <div className="flex flex-col items-center gap-4 p-4 bg-white rounded-xl">
@@ -111,18 +204,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
                             <div className="text-center py-8 text-gray-400">Loading payment details...</div>
                         )}
 
-                        <div className="text-sm text-gray-400 text-center">
+                        <div className="text-sm text-gray-400 text-center px-4">
                             {config?.instructions || 'Scan the QR code or use the UPI ID to make the payment.'}
                         </div>
 
-                        <Button onClick={() => setStep(2)} className="w-full">
+                        <Button onClick={() => setStep(2)} variant="outline" className="w-full">
                             I have made the payment
                         </Button>
+
+
                     </div>
                 )}
 
                 {step === 2 && (
-                    <div className="space-y-6">
+                    <div className="space-y-6 overflow-y-auto max-h-[70vh] p-2 custom-scrollbar">
                         <div className="text-center">
                             <h3 className="text-2xl font-bold text-white mb-2">Submit Proof</h3>
                             <p className="text-gray-400">Enter payment details for verification</p>
@@ -137,17 +232,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
                                     placeholder="e.g. 1234567890"
                                     value={utr}
                                     onChange={(e) => setUtr(e.target.value)}
-                                    required
-                                />
-                            </div>
-                               <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-2">Video/Profile Url</label>
-                                <input
-                                    type="text"
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500/50"
-                                    placeholder=""
-                                    value={video}
-                                    onChange={(e) => setVideo(e.target.value)}
                                     required
                                 />
                             </div>
@@ -181,17 +265,23 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, onClose, onSuc
                             </div>
                         </form>
                     </div>
-                )}
+                )
+                }
 
-                {step === 3 && (
-                    <div className="text-center py-8">
-                        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white mx-auto mb-4 animate-bounce">
-                            <CheckCircle size={32} />
+                {
+                    step === 3 && (
+                        <div className="text-center py-8">
+                            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white mx-auto mb-4 animate-bounce">
+                                <CheckCircle size={32} />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white mb-2">{isDeposit ? 'Deposit Submitted!' : 'Payment Submitted!'}</h3>
+                            <p className="text-gray-400">
+                                {isDeposit
+                                    ? 'We will verify your deposit and update your balance shortly.'
+                                    : 'We will verify your payment and activate your plan shortly.'}
+                            </p>
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">Payment Submitted!</h3>
-                        <p className="text-gray-400">We will verify your payment and activate your plan shortly.</p>
-                    </div>
-                )}
+                    )}
             </Card>
         </div>
     );

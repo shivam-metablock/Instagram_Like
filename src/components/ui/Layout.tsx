@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, LayoutDashboard, ShoppingBag, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon } from 'lucide-react';
+import { Home, LayoutDashboard, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon, Wallet } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useAuth } from '../../context/AuthContext';
 
@@ -22,7 +22,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         ...(user?.role !== 'ADMIN' ? [{ icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: Video, label: 'My Posts', path: '/posts' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: Package, label: 'My Plans', path: '/my-plans' }] : []),
-        ...(user?.role !== 'ADMIN' ? [{ icon: ShoppingBag, label: 'Buy Plans', path: '/plans' }] : []),
+        // ...(user?.role !== 'ADMIN' ? [{ icon: ShoppingBag, label: 'Buy Plans', path: '/plans' }] : []),
+        ...(user?.role !== 'ADMIN' ? [{ icon: Wallet, label: 'Add Funds', path: '/wallet' }] : []),
 
         // ADMIN gets: Dashboard (top), Proxy List, Create Plans, Manage Users, Settings
         ...(user?.role === 'ADMIN' ? [{ icon: LayoutDashboard, label: 'Dashboard', path: '/admin' }] : []),
@@ -31,6 +32,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         ...(user?.role === 'ADMIN' ? [{ icon: Users, label: 'Manage Users', path: '/admin/users' }] : []),
         ...(user?.role === 'ADMIN' ? [{ icon: LucideCopySlash, label: 'Products', path: '/admin/videos' }] : []),
         ...(user?.role === 'ADMIN' ? [{ icon: ListOrderedIcon, label: 'Orders', path: '/admin/orders' }] : []),
+        ...(user?.role === 'ADMIN' ? [{ icon: Wallet, label: 'Wallet Requests', path: '/admin/wallet-requests' }] : []),
 
         // Everyone gets Settings
         { icon: Settings, label: 'Settings', path: '/settings' },
@@ -206,13 +208,21 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </button>
                     <div className="flex items-center gap-4 ml-auto">
                         {user && (
-                            <div className="flex items-center gap-2">
-                                <div className="text-right mr-2">
-                                    <div className="text-sm font-medium text-white">{user.name}</div>
-                                    <div className="text-xs text-gray-400">{user.role}</div>
-                                </div>
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center">
-                                    <User size={16} className="text-white" />
+                            <div className="flex items-center gap-4">
+                                {user.role !== 'ADMIN' && (
+                                    <Link to="/wallet" className="flex items-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 px-3 py-1.5 rounded-lg border border-purple-500/20 transition-all">
+                                        <Wallet size={16} className="text-purple-400" />
+                                        <span className="text-purple-400 font-bold">₹{user.walletBalance || 0}</span>
+                                    </Link>
+                                )}
+                                <div className="flex items-center gap-2">
+                                    <div className="text-right mr-2">
+                                        <div className="text-sm font-medium text-white">{user.name}</div>
+                                        <div className="text-xs text-gray-400">{user.role}</div>
+                                    </div>
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center">
+                                        <User size={16} className="text-white" />
+                                    </div>
                                 </div>
                             </div>
                         )}

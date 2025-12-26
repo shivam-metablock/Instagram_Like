@@ -1,4 +1,6 @@
 import Order from '../models/Order.js';
+import User from '../models/User.js';
+import WalletTransaction from '../models/WalletTransaction.js';
 
 // @desc    Get user orders
 // @route   GET /api/orders
@@ -49,20 +51,44 @@ export const getOrder = async (req, res) => {
 // @access  Private
 export const createOrder = async (req, res) => {
     try {
-        const { planId, amount, utr,video } = req.body;
-        
+        const { planId, amount, utr, video, paymentMethod } = req.body;
+
         let screenshotPath = '';
-        if (req.file) {
-            screenshotPath = req.file.path.replace(/\\/g, '/'); // Normalize path
+        let status = 'PENDING';
+
+        if (paymentMethod === 'WALLET') {
+            const user = await User.findById(req.user._id);
+            if (!user || user.walletBalance < Number(amount)) {
+                return res.status(400).json({ message: 'Insufficient wallet balance' });
+            }
+
+            // Deduct balance
+            user.walletBalance -= Number(amount);
+            await user.save();
+
+            // Create purchase transaction
+            await WalletTransaction.create({
+                userId: req.user._id,
+                amount: Number(amount),
+                type: 'PURCHASE',
+                status: 'APPROVED',
+                description: `Purchase of plan ${planId}`
+            });
+
+            status = 'APPROVED'; // Mark as approved if paid by wallet
+        } else {
+            if (req.file) {
+                screenshotPath = req.file.path.replace(/\\/g, '/'); // Normalize path
+            }
         }
 
         const order = await Order.create({
             userId: req.user._id,
             planId,
             amount,
-            utr,
+            utr: paymentMethod === 'WALLET' ? 'WALLET_PAYMENT' : utr,
             screenshotPath,
-            status: 'PENDING',
+            status,
             video
         });
 
@@ -100,19 +126,19 @@ export const updateOrderStatus = async (req, res) => {
     }
 };
 
-export const getMyOrders=async(req,res)=>{
+export const getMyOrders = async (req, res) => {
     try {
-        const orders=await Order.find({userId:req.user._id}).populate('planId')
+        const orders = await Order.find({ userId: req.user._id }).populate('planId')
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-export const updateOrder=async(req,res)=>{
+export const updateOrder = async (req, res) => {
     try {
-        const order=await Order.findById(req.params.id)
-        if(!order){
-            return res.status(404).json({message:'Order not found'})
+        const order = await Order.findById(req.params.id)
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' })
         }
         order.isCompleted = req.body.isCompleted !== undefined ? req.body.isCompleted : true;
         await order.save()
