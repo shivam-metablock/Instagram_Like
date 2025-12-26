@@ -3,14 +3,15 @@ import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 // import { walletAPI } from '../services/api';
-import { Wallet as WalletIcon, Plus } from 'lucide-react';
+import { Wallet as WalletIcon, Plus, History, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { PaymentModal } from '../components/plans/PaymentModal';
+import { walletAPI } from '../services/api';
 
 export const Wallet: React.FC = () => {
     const { user } = useAuth();
-    // const [transactions, setTransactions] = useState<any[]>([]);
-    // const [loading, setLoading] = useState(true);
+    const [transactions, setTransactions] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -20,13 +21,13 @@ export const Wallet: React.FC = () => {
 
     const fetchTransactions = async () => {
         try {
-            // setLoading(true);
-            // const data = await walletAPI.getTransactions();
-            // setTransactions(data);
+            setLoading(true);
+            const data = await walletAPI.getTransactions();
+            setTransactions(data);
         } catch (err) {
             console.error('Failed to fetch transactions');
         } finally {
-            // setLoading(false);
+            setLoading(false);
         }
     };
 
@@ -78,7 +79,7 @@ export const Wallet: React.FC = () => {
                 )}
 
                 {/* Transactions Table */}
-                {/* <div className="space-y-4">
+                <div className="space-y-4">
                     <div className="flex items-center gap-2 text-white font-bold text-xl">
                         <History size={24} className="text-blue-400" />
                         <span>Transaction History</span>
@@ -146,7 +147,7 @@ export const Wallet: React.FC = () => {
                             </table>
                         </div>
                     </Card>
-                </div> */}
+                </div>
 
                 {/* Deposit Modal */}
                 {showDepositModal && (
