@@ -111,7 +111,7 @@ export const Orders = () => {
                                                         <ImageIcon size={14} /> View
                                                     </button>
                                                 ) : (
-                                                    <span className="text-gray-500 text-xs">No Proof</span>
+                                                    <span className="text-gray-500 text-xs text-white">Wallet Payment</span>
                                                 )}
                                             </td>
                                             <td className={`px-4 py-3 text-white `}><div className={`${getTypeColor(order.status)} text-center py-1 px-2 rounded-full`}>{order.status || 'Unknown'}</div></td>
