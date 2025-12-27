@@ -17,6 +17,7 @@ import { UsersVideo } from './pages/SeeUserView';
 import { Orders } from './pages/Orders';
 import { Wallet } from './pages/Wallet';
 import { WalletRequests } from './pages/WalletRequests';
+import { HistoryFunction } from './pages/History';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           {/* <Route path="/my-plans" element={<ProtectedRoute><MyPlans /></ProtectedRoute>} /> */}
           <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><HistoryFunction /></ProtectedRoute>} />
 
           {/* Admin Only Route */}
           <Route path="/admin" element={<ProtectedRoute requireAdmin={true}><Admin /></ProtectedRoute>} />

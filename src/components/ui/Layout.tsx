@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, LayoutDashboard, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon, Wallet } from 'lucide-react';
+import { Home, LayoutDashboard, Settings, Menu, User, LogOut, LogIn, Plus, Users, List, Instagram, Facebook, Send, Youtube, LucideCopySlash, ListOrderedIcon, HelpingHandIcon, Wallet, History } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useAuth } from '../../context/AuthContext';
 
@@ -23,6 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         // ...(user?.role !== 'ADMIN' ? [{ icon: Video, label: 'My Posts', path: '/posts' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: Package, label: 'My Plans', path: '/my-plans' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: ShoppingBag, label: 'Buy Plans', path: '/plans' }] : []),
+        ...(user?.role !== 'ADMIN' ? [{ icon: History, label: 'History', path: '/history' }] : []),
         ...(user?.role !== 'ADMIN' ? [{ icon: Wallet, label: 'Add Funds', path: '/wallet' }] : []),
 
         // ADMIN gets: Dashboard (top), Proxy List, Create Plans, Manage Users, Settings

@@ -14,7 +14,7 @@ interface User {
     AccountName?: string;
 }
 
-interface Order {
+export interface Order {
     _id: string;
     userId: User;
     planId: {
