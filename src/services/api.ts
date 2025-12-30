@@ -62,7 +62,7 @@ export const authAPI = {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
     },
-    updateMe: async (data: { name: string; number: string }) => {
+    updateMe: async (data: { name: string; number: string, currentPassword: string }) => {
         const response = await api.post('/auth/me', data);
         return response.data;
     },
@@ -182,6 +182,10 @@ export const proxyAPI = {
 export const configAPI = {
     getPaymentConfig: async () => {
         const response = await api.get('/config/payment');
+        return response.data;
+    },
+    addHelpCenter: async (data: any) => {
+        const response = await api.post('/config/help-center', data);
         return response.data;
     },
 

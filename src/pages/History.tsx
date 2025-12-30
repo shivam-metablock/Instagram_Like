@@ -42,12 +42,14 @@ export const HistoryFunction: React.FC = () => {
             setLoading(false);
         }
     };
+    console.log(transactions);
+    
     return (
         <Layout>
                <div className="space-y-4">
                     <div className="flex items-center gap-2 text-white font-bold text-xl">
                         <History size={24} className="text-blue-400" />
-                        <span>Transaction History</span>
+                        <span>Order History</span>
                     </div>
 
                     <Card className="overflow-hidden border-white/10 bg-slate-800/30">
@@ -84,7 +86,7 @@ export const HistoryFunction: React.FC = () => {
                                                         tx.displayType === 'QR' ? "bg-blue-500/10 text-blue-400" :
                                                             "bg-purple-500/10 text-purple-400"
                                                     )}>
-                                                        {tx.utr=="WALLET_PAYMENT" ? "Wallet Payment" : "QR Payment"}
+                                                        {tx._id}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-white text-sm">{tx.planId?.name}</td>
@@ -96,11 +98,13 @@ export const HistoryFunction: React.FC = () => {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={cn(
-                                                        "text-xs",
-                                                        tx.isCompleted ? "text-green-400" :
-                                                            tx.status === 'PENDING' ? "text-amber-400" : "text-red-400"
+                                                        "text-xs text-white",
+                                                        tx.compeletedStatus.toUpperCase() === 'COMPLETED' ? "bg-green-500/10 text-green-400" :
+                                                            tx.compeletedStatus.toUpperCase() === 'PENDING' ? "bg-yellow-500/10 text-yellow-400" :
+                                                                tx.compeletedStatus.toUpperCase() === 'CENCELED' ? "bg-red-500/10 text-red-400" : "bg-red-500/10 text-pink-400"
+                                                     
                                                     )}>
-                                                        {tx.isCompleted ? "Completed" : "Pending"}
+                                                        {tx.compeletedStatus}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-gray-400 text-sm">

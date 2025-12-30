@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
-import { X, Upload, CheckCircle, Copy } from 'lucide-react';
+import { X, Upload, CheckCircle, Copy} from 'lucide-react';
 import { configAPI, orderAPI, walletAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface PaymentModalProps {
     plan?: any;
@@ -101,6 +102,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
         }
     };
 
+    const Navigate = useNavigate();
     if (!plan && !isDeposit) return null;
 
     return (
@@ -138,7 +140,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
 
                         {!isDeposit && (
                             <div className="space-y-2 px-2">
-                                <label className="block text-sm font-medium text-gray-400">Video / Profile URL</label>
+                                <label className="block text-sm font-medium text-gray-400">Link/URL</label>
                                 <input
                                     type="text"
                                     className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500/50"
@@ -151,7 +153,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
                         )}
 
                         {/* WALLET PAYMENT: Show only if enough balance and NOT a deposit */}
-                        {!isDeposit && user && user.walletBalance >= plan.price ? (
+                      {!isDeposit?  user && user.walletBalance >= plan.price ? (
                             <div className="space-y-6">
                                 <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
                                     <p className="text-sm text-gray-400 mb-1">Your Wallet Balance</p>
@@ -162,12 +164,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
                                     disabled={loading}
                                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 h-14 text-lg"
                                 >
-                                    {loading ? 'Processing...' : 'Complete Payment with Wallet'}
+                                    {loading ? 'Processing...' : 'buy plan'}
                                 </Button>
                             </div>
-                        ) : (
-                            /* MANUAL PAYMENT: Show for deposits OR if wallet balance is low */
+                        ):(
                             <div className="space-y-6">
+                                <Button
+                                    onClick={()=>Navigate('/wallet')}
+                                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 h-14 text-lg"
+                                >
+                                first pay in your wallet
+                                </Button>
+                            </div>
+                        ) :
+                                          <div className="space-y-6">
                                 {!isDeposit && (
                                     <div className="relative">
                                         <div className="absolute inset-0 flex items-center">
@@ -211,7 +221,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ plan, isDeposit, onC
                                     I have made the payment
                                 </Button>
                             </div>
-                        )}
+                        
+
+                        }
 
 
                     </div>

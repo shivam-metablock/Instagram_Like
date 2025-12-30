@@ -1,31 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { useAuth } from '../context/AuthContext';
-import { User, CreditCard } from 'lucide-react';
+import { User, CreditCard, HelpCircle } from 'lucide-react';
 import { PaymentConfigForm } from '../components/settings/PaymentConfigForm';
 import { Button } from '../components/ui/Button';
+import { configAPI } from '../services/api';
 
 export const Settings: React.FC = () => {
-    const { user,updateMe } = useAuth();
+    const { user, updateMe } = useAuth();
 
     const [profileData, setProfileData] = useState({
         name: user?.name || '',
         number: user?.number || '',
+        currentPassword: user?.password || ""
     });
+    const [message, setMessage] = useState("")
 
 
     const handleProfileUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         updateMe(profileData)
     };
-    useEffect(()=>{
-       setProfileData({
-        name: user?.name || '',
-        number: user?.number || '',
-       }) 
-        },[user])
-
+    useEffect(() => {
+        setProfileData({
+            name: user?.name || '',
+            number: user?.number || '',
+            currentPassword: user?.password || ""
+        })
+    }, [user])
+    const Helpref = useRef<null | HTMLInputElement>(null)
+    const AddHelp = async () => {
+        try {
+            await configAPI.addHelpCenter({ title: Helpref.current?.value || "" })
+            setMessage("Help Center Added Successfully")
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Layout>
@@ -49,33 +61,42 @@ export const Settings: React.FC = () => {
                             <label className="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
                             <input
                                 type="text"
-                                
+
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                 value={profileData.name}
-                                onChange={(e)=>setProfileData({
+                                onChange={(e) => setProfileData({
                                     ...profileData,
                                     name: e.target.value
                                 })}
-                                   />
+                            />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
                             <input
                                 type="number"
-                                
+
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
                                 value={profileData.number}
-                                onChange={(e)=>setProfileData({
+                                onChange={(e) => setProfileData({
                                     ...profileData,
                                     number: e.target.value
                                 })}
-                                   />
+                            />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-2">User Role</label>
                             <div className="px-4 py-3 bg-white/5 rounded-lg text-gray-400 border border-white/10">
                                 {user?.role || 'USER'}
                             </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-400 mb-2">New Password</label>
+                            <input
+                                type="password"
+                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
+                                value={profileData.currentPassword}
+                                onChange={(e) => setProfileData({ ...profileData, currentPassword: e.target.value })}
+                            />
                         </div>
                         <Button type="submit">Save Changes</Button>
                     </form>
@@ -96,51 +117,14 @@ export const Settings: React.FC = () => {
                             <input
                                 type="password"
                                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
-                                value={passwordData.currentPassword}
-                                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                value={profileData.currentPassword}
+                                onChange={(e) => setProfileData({ ...profileData, currentPassword: e.target.value })}
                             />
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">New Password</label>
-                            <input
-                                type="password"
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
-                                value={passwordData.newPassword}
-                                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-400 mb-2">Confirm New Password</label>
-                            <input
-                                type="password"
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500/50"
-                                value={passwordData.confirmPassword}
-                                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                            />
-                        </div>
+                      
+                      
                         <Button type="submit" variant="danger">Change Password</Button>
                     </form>
-
-                    <div className="pt-6 border-t border-white/10">
-                        <div className="flex items-center justify-between py-3">
-                            <div className="flex items-center gap-3">
-                                <Smartphone size={20} className="text-gray-400" />
-                                <div>
-                                    <div className="text-white font-medium">Two-Factor Authentication</div>
-                                    <div className="text-sm text-gray-400">Add an extra layer of security</div>
-                                </div>
-                            </div>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    className="sr-only peer"
-                                    checked={twoFactorEnabled}
-                                    onChange={(e) => setTwoFactorEnabled(e.target.checked)}
-                                />
-                                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                            </label>
-                        </div>
-                    </div>
                 </Card> */}
 
                 {/* Notification Settings */}
@@ -222,16 +206,30 @@ export const Settings: React.FC = () => {
 
                 {/* Admin Payment Configuration */}
                 {user?.role === 'ADMIN' && (
-                    <Card>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-yellow-500/20 rounded-lg text-yellow-400">
-                                <CreditCard size={20} />
+                    <>
+                        <Card>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 bg-yellow-500/20 rounded-lg text-yellow-400">
+                                    <CreditCard size={20} />
+                                </div>
+                                <h3 className="text-xl font-bold text-white">Payment Configuration</h3>
                             </div>
-                            <h3 className="text-xl font-bold text-white">Payment Configuration</h3>
-                        </div>
 
-                        <PaymentConfigForm />
-                    </Card>
+                            <PaymentConfigForm />
+                        </Card>
+                        <Card>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 bg-yellow-500/20 rounded-lg text-yellow-400">
+                                    <HelpCircle size={20} />
+                                </div>
+                                <h3 className="text-xl font-bold text-white">Help Center</h3>
+                            </div>
+
+                            <input type="text" ref={Helpref} className="w-full p-2 border border-gray-600 bg-transparent text-white rounded-lg" />
+                            <Button variant="outline" className="text-sm" onClick={() => AddHelp()}>Add Question</Button>
+                            {message && <p className="text-sm text-green-500 mt-2">{message}</p>}
+                        </Card>
+                    </>
                 )}
 
                 {/* Danger Zone */}

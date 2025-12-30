@@ -1,7 +1,8 @@
 import express from 'express';
 import {
     getPaymentConfig,
-    updatePaymentConfig
+    updatePaymentConfig,
+    addHelpCenter
 } from '../controllers/configController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -26,5 +27,6 @@ const upload = multer({ storage: storage });
 router.route('/payment')
     .get(getPaymentConfig)
     .put(protect, upload.single('qrCode'), updatePaymentConfig);
+    router.post("/help-center",addHelpCenter)
 
 export default router;

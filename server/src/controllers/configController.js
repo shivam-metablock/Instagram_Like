@@ -1,3 +1,4 @@
+import HelpCenter from '../models/HelpCenter.js';
 import PaymentConfig from '../models/PaymentConfig.js';
 
 // @desc    Get payment config
@@ -52,3 +53,14 @@ export const updatePaymentConfig = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+export const addHelpCenter=async(req,res)=>{
+    try {
+        const {title}=req.body
+        const helpCenter=await HelpCenter.create({title})
+        res.json(helpCenter)
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+}

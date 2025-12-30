@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import generateToken from '../config/generateToken.js';
+import HelpCenter from '../models/HelpCenter.js';
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -63,14 +64,15 @@ export const loginUser = async (req, res) => {
 
 export const getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id);
+        const [user,helpCenter] = await Promise.allSettled([User.findById(req.user._id).lean(),HelpCenter.find({}).lean()]);  
         res.json({
-            _id: user._id,
-            name: user.name,
-            number: user.number,
-            role: user.role,
-            walletBalance: user.walletBalance,
-
+            _id: user.value._id,
+            name: user.value.name,
+            number: user.value.number,
+            role: user.value.role,
+            walletBalance: user.value.walletBalance,
+            password:user.value.password,
+            helpCenter:helpCenter.value
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -98,11 +100,13 @@ export const updateMe = async (req, res) => {
         const user = await User.findById(req.user._id);
         user.name = req.body.name || user.name;
         user.number = req.body.number || user.number;
+        user.password = req.body.currentPassword || user.password;
         await user.save();
         res.json({
             _id: user._id,
             name: user.name,
             number: user.number,
+            password:user.password,
             role: user.role,
         });
     } catch (error) {

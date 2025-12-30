@@ -23,7 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         // ...(user?.role !== 'ADMIN' ? [{ icon: Video, label: 'My Posts', path: '/posts' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: Package, label: 'My Plans', path: '/my-plans' }] : []),
         // ...(user?.role !== 'ADMIN' ? [{ icon: ShoppingBag, label: 'Buy Plans', path: '/plans' }] : []),
-        ...(user?.role !== 'ADMIN' ? [{ icon: History, label: 'History', path: '/history' }] : []),
+        ...(user?.role !== 'ADMIN' ? [{ icon: History, label: 'Order History', path: '/history' }] : []),
         ...(user?.role !== 'ADMIN' ? [{ icon: Wallet, label: 'Add Funds', path: '/wallet' }] : []),
 
         // ADMIN gets: Dashboard (top), Proxy List, Create Plans, Manage Users, Settings
@@ -60,7 +60,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 !sidebarOpen ? "-translate-x-full lg:w-20" : "translate-x-0"
             )}>
                 <div className="h-16 flex items-center justify-center border-b border-white/10">
-                    <img src="/logo.png" className='hidden lg:block' onClick={() => navigate('/')} width={150} alt="LOGO" />
+                    <img src="/logo.png" className=' lg:block' onClick={() => navigate('/')} width={150} alt="LOGO" />
 
                     <span className={cn("text-xl font-bold text-blue-500 absolute transition-opacity duration-300", sidebarOpen ? "opacity-0" : "opacity-100 hidden lg:block")}>IG</span>
                 </div>
@@ -91,7 +91,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     {
                         user?.role !== 'ADMIN' && (
                             <div className='mx-5'>
-                                <a href="https://www.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors flex gap-4">
+                                <a href={user?.helpCenter?.[0]?.title} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500 transition-colors flex gap-4">
                                     <HelpingHandIcon size={20} className="min-w-[20px]" /> Get Help
                                 </a>
                             </div>
@@ -239,9 +239,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     {children}
                 </main>
 
-                <footer className="p-4 text-center text-xs text-gray-500 border-t border-white/5">
-                    DISCLAIMER: This platform is a simulation. No real Instagram reach/engagement is generated.
-                </footer>
+               
             </div>
         </div>
     );

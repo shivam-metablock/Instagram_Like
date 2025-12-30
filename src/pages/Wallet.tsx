@@ -64,23 +64,23 @@ export const Wallet: React.FC = () => {
         <Layout>
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* Balance Card */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <Card className="bg-slate-800/50 border-white/10 flex flex-col justify-center p-8 text-center space-y-4">
+                <div className="grid place-items-center  sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <Card className="bg-slate-800/50 w-[80%] sm:w-full border-white/10 flex flex-col justify-center sm:p-8 p-2 text-center space-y-4">
                         <div className="p-8">
                             <div className="flex items-center justify-between mb-8">
                                 <div className="p-3 bg-white/10 rounded-2xl">
-                                    <WalletIcon className="text-white" size={32} />
+                                    <WalletIcon className="text-white" size={20} />
                                 </div>
                                 <span className="text-white/60 text-sm font-medium"> Wallet</span>
                             </div>
                             <div className="space-y-1">
                                 <p className="text-white/60 text-sm uppercase tracking-wider">Available Balance</p>
-                                <h2 className="text-5xl font-black text-white">₹{user?.walletBalance || 0}</h2>
+                                <h2 className="sm:text-5xl text-xl font-black text-white">₹{user?.walletBalance || 0}</h2>
                             </div>
                         </div>
                     </Card>
 
-                    <Card className="bg-slate-800/50 border-white/10 flex flex-col justify-center p-8 text-center space-y-4">
+                    <Card className="bg-slate-800/50 w-[80%] sm:w-full border-white/10 sm:p-8 p-2 flex flex-col justify-center p-8 text-center space-y-4">
                         <div className="p-4 bg-blue-500/10 rounded-full w-16 h-16 mx-auto flex items-center justify-center text-blue-400">
                             <Plus size={32} />
                         </div>
@@ -90,7 +90,7 @@ export const Wallet: React.FC = () => {
                         </div>
                         <Button
                             onClick={() => setShowDepositModal(true)}
-                            className="w-full bg-blue-600 hover:bg-blue-500"
+                            className="w-full  bg-blue-600 hover:bg-blue-500"
                         >
                             Deposit Money
                         </Button>

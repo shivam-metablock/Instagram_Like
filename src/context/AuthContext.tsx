@@ -6,7 +6,13 @@ interface User {
     name: string;
     role: string;
     number: string;
+    password?: string;
+    helpCenter?: HelpCenter[];
     walletBalance: number;
+}
+interface HelpCenter {
+    _id: string;
+    title: string;
 }
 
 interface AuthContextType {
@@ -15,7 +21,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<User>;
     register: (name: string, password: string, number: string) => Promise<User>;
     logout: () => void;
-    updateMe: (data: { name: string; number: string }) => void;
+    updateMe: (data: { name: string; number: string ,currentPassword: string}) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -92,7 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setLoading(false);
         }
     };
-    const updateMe = async (data: { name: string; number: string }) => {
+    const updateMe = async (data: { name: string; number: string, currentPassword: string }) => {
         const response = await authAPI.updateMe(data);
         setUser(response);
         setLoading(false);
