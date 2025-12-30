@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { useAuth } from '../context/AuthContext';
@@ -13,7 +13,7 @@ export const Settings: React.FC = () => {
     const [profileData, setProfileData] = useState({
         name: user?.name || '',
         number: user?.number || '',
-        currentPassword: user?.password || ""
+        currentPassword:  ""
     });
     const [message, setMessage] = useState("")
 
@@ -26,13 +26,14 @@ export const Settings: React.FC = () => {
         setProfileData({
             name: user?.name || '',
             number: user?.number || '',
-            currentPassword: user?.password || ""
+            currentPassword:  ""
         })
     }, [user])
-    const Helpref = useRef<null | HTMLInputElement>(null)
+    //@ts-ignore
+    const [helpCenter, setHelpCenter] = useState(user?.helpCenter[0]?.title || "")
     const AddHelp = async () => {
         try {
-            await configAPI.addHelpCenter({ title: Helpref.current?.value || "" })
+            await configAPI.addHelpCenter({ title:helpCenter })
             setMessage("Help Center Added Successfully")
         } catch (error) {
             console.log(error)
@@ -225,7 +226,7 @@ export const Settings: React.FC = () => {
                                 <h3 className="text-xl font-bold text-white">Help Center</h3>
                             </div>
 
-                            <input type="text" ref={Helpref} className="w-full p-2 border border-gray-600 bg-transparent text-white rounded-lg" />
+                            <input type="text" onChange={(e) => setHelpCenter(e.target.value)} value={helpCenter} className="w-full p-2 border border-gray-600 bg-transparent text-white rounded-lg" />
                             <Button variant="outline" className="text-sm" onClick={() => AddHelp()}>Add Question</Button>
                             {message && <p className="text-sm text-green-500 mt-2">{message}</p>}
                         </Card>
