@@ -603,10 +603,6 @@ export const Landing: React.FC = () => {
             <p className="text-slate-400 text-sm">
                 © 2024 IG Simulator. All rights reserved.
             </p>
-            <p className="text-slate-400 text-xs max-w-md text-center md:text-right">
-                DISCLAIMER: This website is a simulation platform for educational purposes only.
-                We do not sell real Instagram views or engagement. Not affiliated with Instagram/Meta.
-            </p>
         </div>
     </div>
 </footer>
