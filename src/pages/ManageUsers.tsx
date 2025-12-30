@@ -11,6 +11,7 @@ interface User {
     _id: string;
     name: string;
     email: string;
+    number :string,
     role: string;
     AccountName?: string;
 }
@@ -38,6 +39,7 @@ interface UserWithOrders {
 
 export const ManageUsers: React.FC = () => {
     const [usersData, setUsersData] = useState<UserWithOrders[]>([]);
+    const [usersDataCP, setUsersDataCP] = useState<UserWithOrders[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedUser, setSelectedUser] = useState<UserWithOrders | null>(null);
     const [showPlansModal, setShowPlansModal] = useState(false);
@@ -88,6 +90,7 @@ export const ManageUsers: React.FC = () => {
                 });
 
             setUsersData(usersWithOrders);
+            setUsersDataCP(usersWithOrders);
         } catch (error) {
             console.error('Error fetching users and orders:', error);
         } finally {
@@ -108,6 +111,12 @@ export const ManageUsers: React.FC = () => {
         await orderAPI.updateOrder(orderId, { isCompleted: true })
         fetchAllUsersAndOrders()
     }
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const searchValue = e.currentTarget.value;
+        const filteredUsers = usersDataCP.filter(user => user.user.name.toLowerCase().includes(searchValue.toLowerCase()));
+        setUsersData(filteredUsers);
+    }
     return (
         <Layout>
             <div className="max-w-7xl mx-auto space-y-8">
@@ -123,6 +132,11 @@ export const ManageUsers: React.FC = () => {
                         </div>
                         <Users className="text-blue-400" size={48} />
                     </div>
+                </div>
+                <div className='flex justify-end'>
+                 
+                     <input type="search" placeholder="Search users" onChange={(e) => handleSearch(e)} className="p-2 border border-gray-400 focus:border-blue-400 bg-transparent text-white rounded" />
+                   
                 </div>
 
                 {loading ? (
@@ -140,7 +154,7 @@ export const ManageUsers: React.FC = () => {
                                 <thead className="bg-white/5 text-xs uppercase text-gray-400">
                                     <tr>
                                         <th className="px-4 py-3">Name</th>
-                                        <th className="px-4 py-3">Email</th>
+                                        <th className="px-4 py-3">Number</th>
                                         <th className="px-4 py-3">Instagram Account</th>
                                         <th className="px-4 py-3">Total Orders</th>
                                         <th className="px-4 py-3">Total Spent</th>
@@ -152,7 +166,7 @@ export const ManageUsers: React.FC = () => {
                                         usersData.map((userData) => (
                                             <tr key={userData.user._id} className="hover:bg-white/5">
                                                 <td className="px-4 py-3 text-white font-medium">{userData.user.name}</td>
-                                                <td className="px-4 py-3 text-gray-400">{userData.user.email}</td>
+                                                <td className="px-4 py-3 text-gray-400">{userData.user.number}</td>
                                                 <td className="px-4 py-3 text-gray-300">{userData.user.AccountName || '-'}</td>
                                                 <td className="px-4 py-3 text-white">{userData.orders.length}</td>
                                                 <td className="px-4 py-3 text-green-400 font-bold">

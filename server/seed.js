@@ -2,13 +2,15 @@ import dotenv from 'dotenv';
 import connectDB from './src/config/db.js';
 import User from './src/models/User.js';
 import Plan from './src/models/Plan.js';
+import Order from './src/models/Order.js';
+import WalletTransaction from './src/models/WalletTransaction.js';
 
 dotenv.config();
 
 const users = [
     {
         name: 'Admin User',
-        number: '1234567890',
+        number: '8905066047',
         password: 'admin123',
         role: 'ADMIN',
     },
@@ -38,7 +40,8 @@ const seedDatabase = async () => {
         // Clear existing data
         await User.deleteMany();
         await Plan.deleteMany();
-
+        await Order.deleteMany();
+        await WalletTransaction.deleteMany();
         // Create users
         console.log('Seeding users...');
         await User.insertMany(users);

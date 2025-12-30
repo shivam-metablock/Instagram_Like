@@ -32,10 +32,11 @@ const orderSchema = new mongoose.Schema({
     video: {
         type: String,
     },
-    isCompleted: {
-        type: Boolean,
-        default: false,
-    },
+    compeletedStatus: {
+        type: String,
+        enum: ['Pending', 'Completed', 'In Progress', 'Cenceled'],
+        default: 'Pending',
+    }
 }, {
     timestamps: true,
 });

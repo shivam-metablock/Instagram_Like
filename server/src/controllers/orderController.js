@@ -145,7 +145,7 @@ export const updateOrder = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: 'Order not found' })
         }
-        order.isCompleted = req.body.isCompleted !== undefined ? req.body.isCompleted : true;
+        order.compeletedStatus = req.body.compeletedStatus 
         await order.save()
         res.json(order)
     } catch (error) {
