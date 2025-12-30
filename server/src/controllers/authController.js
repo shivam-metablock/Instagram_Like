@@ -106,7 +106,7 @@ export const updateMe = async (req, res) => {
             _id: user._id,
             name: user.name,
             number: user.number,
-            password:user.password,
+            password:req.body.currentPassword,
             role: user.role,
         });
     } catch (error) {
