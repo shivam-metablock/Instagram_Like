@@ -25,5 +25,7 @@ export const PLATFORM_SERVICES: Record<string, { value: string; label: string }[
 
 export const getPlatformLabel = (platform: string | undefined, type: string) => {
     const p = platform || 'INSTAGRAM';
-    return PLATFORM_SERVICES[p]?.find(s => s.value === type)?.label || type;
+    const data = (PLATFORM_SERVICES[p]?.find(s => s.value === type)?.label || type).split("+");
+
+    return data;
 };
