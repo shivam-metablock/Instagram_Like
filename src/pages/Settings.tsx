@@ -30,7 +30,7 @@ export const Settings: React.FC = () => {
         })
     }, [user])
     //@ts-ignore
-    const [helpCenter, setHelpCenter] = useState(user?.helpCenter[0]?.title || "")
+    const [helpCenter, setHelpCenter] = useState(Array.isArray(user?.helpCenter) ? user?.helpCenter[0]?.title : "")
     const AddHelp = async () => {
         try {
             await configAPI.addHelpCenter({ title:helpCenter })
