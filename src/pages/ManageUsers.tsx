@@ -61,7 +61,6 @@ export const ManageUsers: React.FC = () => {
 
             // Fetch all orders
             const orders: Order[] = await orderAPI.getAll();
-            console.log('Orders fetched:', orders);
 
             // Group orders by user
             const userOrdersMap: { [key: string]: Order[] } = {};
@@ -114,8 +113,10 @@ export const ManageUsers: React.FC = () => {
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const searchValue = e.currentTarget.value;
-        const filteredUsers = usersDataCP.filter(user => user.user.name.toLowerCase().includes(searchValue.toLowerCase()));
-        setUsersData(filteredUsers);
+      
+            const filteredUsers = usersDataCP.filter(user => user.user.name.toLowerCase().includes(searchValue.toLowerCase())||user.user.number.includes(searchValue));
+            setUsersData(filteredUsers);
+      
     }
     return (
         <Layout>

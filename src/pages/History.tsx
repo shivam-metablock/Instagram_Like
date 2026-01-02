@@ -20,7 +20,6 @@ export const HistoryFunction: React.FC = () => {
         try {
             setLoading(true);
  const orders: Order[] = await orderAPI.getAll();
-            console.log('Orders fetched:', orders);
 
             const userOrdersMap: { [key: string]: Order[] } = {};
             orders.forEach((order: Order) => {

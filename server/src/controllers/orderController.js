@@ -16,7 +16,7 @@ export const getOrders = async (req, res) => {
 
         const orders = await Order.find({ ...query, status: { $ne: 'REJECTED' } })
             .populate('planId')
-            .populate('userId', 'name email')
+            .populate('userId', 'name email number')
             .sort('-createdAt');
         res.json(orders);
     } catch (error) {
