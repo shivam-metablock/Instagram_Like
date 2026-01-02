@@ -112,9 +112,10 @@ export const UsersVideo: React.FC = () => {
                 <div className=" flex items-center justify-between">
                     <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">Orders
                     </h3>
-                    <div className='flex justify-end'>
+                  <div className='flex flex-wrap gap-2'>
+                      <div className='flex justify-end'>
 
-                        <input type="search" placeholder="Search users" onChange={(e) => handleSearch2(e)} className="p-2 border border-gray-400 focus:border-blue-400 bg-transparent text-white rounded" />
+                        <input type="search" placeholder="Search users" onChange={(e) => handleSearch2(e)} className="p-1 border border-gray-400 focus:border-blue-400 bg-transparent text-white rounded" />
 
                     </div>
                     <div className="flex items-center gap-2">
@@ -122,7 +123,7 @@ export const UsersVideo: React.FC = () => {
 
 
                             onChange={(e) => handleSearch(e)}
-                            className="bg-slate-800 text-white text-xs border border-white/10 rounded px-2 py-1 focus:outline-none focus:border-purple-500"
+                            className="bg-slate-800 text-white text-xs border border-white/10 rounded px-2 py-2 focus:outline-none focus:border-purple-500"
                         >
                             <option value="">All</option>
                             <option value="Pending">Pending</option>
@@ -131,6 +132,7 @@ export const UsersVideo: React.FC = () => {
                             <option value="Cenceled">Cenceled</option>
                         </select>
                     </div>
+                  </div>
                 </div>
                 {usersData.length > 0 ? (
                     <div className="overflow-x-auto">
