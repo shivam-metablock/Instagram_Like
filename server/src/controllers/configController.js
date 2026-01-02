@@ -59,7 +59,6 @@ export const addHelpCenter=async(req,res)=>{
     try {
         const {title}=req.body
         let helpCenter=await HelpCenter.findOne({})
-        console.log("helpCenter",helpCenter);
         if(helpCenter){
             helpCenter.title=title
             await helpCenter.save()
