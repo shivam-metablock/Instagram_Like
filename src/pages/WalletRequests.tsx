@@ -3,7 +3,7 @@ import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { walletAPI } from '../services/api';
-import { Loader2, CheckCircle, XCircle,  User } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle, User } from 'lucide-react';
 
 export const WalletRequests: React.FC = () => {
     const [requests, setRequests] = useState<any[]>([]);
