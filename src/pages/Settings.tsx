@@ -227,7 +227,7 @@ export const Settings: React.FC = () => {
                             </div>
 
                             <input type="text" onChange={(e) => setHelpCenter(e.target.value)} value={helpCenter} className="w-full p-2 border border-gray-600 bg-transparent text-white rounded-lg" />
-                            <Button variant="outline" className="text-sm" onClick={() => AddHelp()}>Add Question</Button>
+                            <Button variant="outline" className="text-sm" onClick={() => AddHelp()}>Add Help</Button>
                             {message && <p className="text-sm text-green-500 mt-2">{message}</p>}
                         </Card>
                     </>

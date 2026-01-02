@@ -58,7 +58,15 @@ export const updatePaymentConfig = async (req, res) => {
 export const addHelpCenter=async(req,res)=>{
     try {
         const {title}=req.body
-        const helpCenter=await HelpCenter.create({title})
+        let helpCenter=await HelpCenter.findOne({})
+        console.log("helpCenter",helpCenter);
+        if(helpCenter){
+            helpCenter.title=title
+            await helpCenter.save()
+        }else{
+            helpCenter=await HelpCenter.create({title})
+        }
+        
         res.json(helpCenter)
     } catch (error) {
         res.status(500).json({message:error.message})

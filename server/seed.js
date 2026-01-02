@@ -4,6 +4,7 @@ import User from './src/models/User.js';
 import Plan from './src/models/Plan.js';
 import Order from './src/models/Order.js';
 import WalletTransaction from './src/models/WalletTransaction.js';
+import HelpCenter from './src/models/HelpCenter.js';
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ const seedDatabase = async () => {
         await Plan.deleteMany();
         await Order.deleteMany();
         await WalletTransaction.deleteMany();
+        await HelpCenter.deleteMany();
         // Create users
         console.log('Seeding users...');
         await User.insertMany(users);
