@@ -3,7 +3,7 @@ import { Layout } from '../components/ui/Layout';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { walletAPI } from '../services/api';
-import { Loader2, CheckCircle, XCircle, ExternalLink, User } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle,  User } from 'lucide-react';
 
 export const WalletRequests: React.FC = () => {
     const [requests, setRequests] = useState<any[]>([]);
@@ -69,7 +69,7 @@ export const WalletRequests: React.FC = () => {
                             <Card key={request._id} className="bg-slate-800/40 border-white/5 hover:border-white/10 transition-colors">
                                 <div className="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
                                     {/* Screenshot Preview */}
-                                    <div className="w-full md:w-32 h-32 rounded-xl overflow-hidden bg-black flex-shrink-0 border border-white/10 relative group">
+                                    {/* <div className="w-full md:w-32 h-32 rounded-xl overflow-hidden bg-black flex-shrink-0 border border-white/10 relative group">
                                         {request.screenshotPath ? (
                                             <>
                                                 <img
@@ -89,7 +89,7 @@ export const WalletRequests: React.FC = () => {
                                         ) : (
                                             <div className="flex items-center justify-center h-full text-gray-600 text-xs">No Image</div>
                                         )}
-                                    </div>
+                                    </div> */}
 
                                     {/* User and Info */}
                                     <div className="flex-1 space-y-2">
